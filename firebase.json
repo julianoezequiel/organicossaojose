@@ -8,6 +8,7 @@
   },
   "hosting": {
     "public": "dist",
+    "site": "organicossaojose-19c51",
     "ignore": [
       "firebase.json",
       "**/.*",

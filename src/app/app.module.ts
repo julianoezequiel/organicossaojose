@@ -45,6 +45,38 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from './views/login/auth.service';
+import { HttpClientModule } from '@angular/common/http';
+
+import { ToastrModule } from 'ngx-toastr';
+import { AuthGuard } from './views/guard/auth.guard';
+import { ListagemUsuariosComponent } from './views/cadastros/listagem-usuarios/listagem-usuarios.component';
+import { CadastroUsuariosComponent } from './views/cadastros/cadastro-usuarios/cadastro-usuarios.component';
+import { ListagemProdutosComponent } from './views/cadastros/listagem-produtos/listagem-produtos.component';
+import { CadastroProdutosComponent } from './views/cadastros/cadastro-produtos/cadastro-produtos.component';
+import { ListagemPedidosComponent } from './views/cadastros/listagem-pedidos/listagem-pedidos.component';
+import { HistoricoPedidosComponent } from './views/cadastros/historico-pedidos/historico-pedidos.component';
+import { CadastroPedidosComponent } from './views/cadastros/cadastro-pedidos/cadastro-pedidos.component';
+import { ListaUsuariosComponent } from './views/cadastros/lista-usuarios/lista-usuarios.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { TesteNavComponent } from './views/cadastros/teste-nav/teste-nav.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { TesteFormComponent } from './views/cadastros/teste-form/teste-form.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
+import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-produtos.component';
+import { ListaPedidosComponent } from './views/cadastros/lista-pedidos/lista-pedidos.component';
+import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historico-pedidos/lista-historico-pedidos.component';
 
 @NgModule({
   imports: [
@@ -63,6 +95,23 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    FormsModule,
+    ReactiveFormsModule,    
+    HttpClientModule,
+    ToastrModule.forRoot(),
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCardModule
   ],
   declarations: [
     AppComponent,
@@ -70,12 +119,28 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ListagemUsuariosComponent,
+    CadastroUsuariosComponent,
+    ListagemProdutosComponent,
+    CadastroProdutosComponent,
+    ListagemPedidosComponent,
+    HistoricoPedidosComponent,
+    CadastroPedidosComponent,
+    ListaUsuariosComponent,
+    TesteNavComponent,
+    TesteFormComponent,
+    ListaProdutosComponent,
+    ListaPedidosComponent,
+    ListaHistoricoPedidosComponent
   ],
   providers: [{
     provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }],
+    useClass: HashLocationStrategy,
+  },
+  AuthService,
+  AuthGuard
+],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

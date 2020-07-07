@@ -57,17 +57,18 @@ export class AuthService {
 
   // Sign in with email/password
   SignIn(email, password) {
-    return this.afAuth
-      .signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        this.ngZone.run(() => {
-          this.router.navigate(["dashboard"]);
+    return new Promise((resolve,reject)=>{
+       this.afAuth
+        .signInWithEmailAndPassword(email, password)
+        .then((result) => {
+          this.SetUserData(result.user);
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+          // window.alert(error.message);
         });
-        this.SetUserData(result.user);
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
+    });
   }
 
   // Sign up with email/password
@@ -148,9 +149,12 @@ export class AuthService {
       emailVerified: user.emailVerified,
     };
 
+    localStorage.setItem("user", JSON.stringify(userData));
+
     return userRef.set(userData, {
       merge: true,
     });
+
   }
 
   // Sign out

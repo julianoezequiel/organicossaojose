@@ -1,0 +1,12 @@
+.full-width-table {
+  width: 100%;
+}
+
+#add-button{
+
+  float: right;
+  right: 20px;
+  bottom: 10px;
+  left: auto;
+  position: relative;
+}

@@ -3,6 +3,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
+import { Produto } from '../model/produto.model';
+import { ProdutosService } from '../services/produtos.service';
+import { promise } from 'protractor';
 
 // TODO: Replace this with your own data model type
 export interface ListaProdutosItem {
@@ -32,6 +35,17 @@ const EXAMPLE_DATA: ListaProdutosItem[] = [
   {id: 18, name: 'Argon'},
   {id: 19, name: 'Potassium'},
   {id: 20, name: 'Calcium'},
+  {id: 21, name: 'Neon'},
+  {id: 22, name: 'Sodium'},
+  {id: 23, name: 'Magnesium'},
+  {id: 24, name: 'Aluminum'},
+  {id: 25, name: 'Silicon'},
+  {id: 26, name: 'Phosphorus'},
+  {id: 27, name: 'Sulfur'},
+  {id: 28, name: 'Chlorine'},
+  {id: 29, name: 'Argon'},
+  {id: 30, name: 'Potassium'},
+  {id: 31, name: 'Calcium'},
 ];
 
 /**
@@ -39,13 +53,32 @@ const EXAMPLE_DATA: ListaProdutosItem[] = [
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class ListaProdutosDataSource extends DataSource<ListaProdutosItem> {
-  data: ListaProdutosItem[] = EXAMPLE_DATA;
+export class ListaProdutosDataSource extends DataSource<Produto> {
+  data: Produto[] = [];
   paginator: MatPaginator;
   sort: MatSort;
 
-  constructor() {
-    super();
+  constructor(public produtosService:ProdutosService) {
+    super();   
+  }
+
+  carregarDados():Promise<Produto[]>{
+   return new Promise<Produto[]>((acept,reject)=>{
+    this.produtosService.read_all().subscribe((data)=>{
+      this.data = data.map((e)=>{
+        return {
+          _id: e.payload.doc.id,
+          descricao: e.payload.doc.data()["descricao"],
+          limite: e.payload.doc.data()["limite"],
+          observacao: e.payload.doc.data()["observacao"],
+          unidade_medida:e.payload.doc.data()["unidade_medida"],
+          valorA:e.payload.doc.data()["valorA"],
+          valorB:e.payload.doc.data()["valorB"]
+        }
+      })
+      acept(this.data);
+    });
+   })
   }
 
   /**
@@ -53,7 +86,7 @@ export class ListaProdutosDataSource extends DataSource<ListaProdutosItem> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<ListaProdutosItem[]> {
+  connect(): Observable<Produto[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
@@ -77,7 +110,7 @@ export class ListaProdutosDataSource extends DataSource<ListaProdutosItem> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: ListaProdutosItem[]) {
+  private getPagedData(data: Produto[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -86,7 +119,7 @@ export class ListaProdutosDataSource extends DataSource<ListaProdutosItem> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: ListaProdutosItem[]) {
+  private getSortedData(data: Produto[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -94,8 +127,8 @@ export class ListaProdutosDataSource extends DataSource<ListaProdutosItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
+        case 'name': return compare(a.descricao, b.descricao, isAsc);
+        case 'id': return compare(+a._id, +b._id, isAsc);
         default: return 0;
       }
     });

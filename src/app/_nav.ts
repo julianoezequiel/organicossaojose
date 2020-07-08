@@ -30,7 +30,7 @@ export const navItems: INavData[] = [
     },
     {
         name: 'Link5',
-        url: '/cadastro-pedidos',
+        url: '/cadastro-produtos',
         icon: 'icon-drop'
       },
 

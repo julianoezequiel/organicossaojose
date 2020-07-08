@@ -55,14 +55,7 @@ export const routes: Routes = [
     data: {
       title: 'Register Page'
     }
-  },
-  {
-    path: 'cadastro-pedidos',
-    component: CadastroPedidosComponent,
-    data: {
-      title: 'Novo Pedido'
-    }
-  },
+  }, 
   {
     path: '',
     component: DefaultLayoutComponent,
@@ -71,6 +64,13 @@ export const routes: Routes = [
       title: 'Home'
     },
     children: [
+      {
+        path: 'cadastro-pedidos',
+        component: CadastroPedidosComponent,
+        data: {
+          title: 'Novo Pedido'
+        }
+      },
       {
         path: 'lista-de-usuario',
         component: ListaUsuariosComponent,

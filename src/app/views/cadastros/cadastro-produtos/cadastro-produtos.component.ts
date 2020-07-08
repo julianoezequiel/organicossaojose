@@ -134,7 +134,7 @@ export class CadastroProdutosComponent implements OnInit {
       valorA: [this.produto.valorA, Validators.required],
       valorB: [this.produto.valorB],
       limite: [this.produto.limite],
-      unidade_medida: [this.produto.unidade_medida, Validators.required],
+      unidade_medida: [this.produto?.unidade_medida?.id, Validators.required],
     });
   }
 
@@ -192,9 +192,13 @@ export class CadastroProdutosComponent implements OnInit {
       valorB: controls.valorB.value,
       limite: controls.limite.value,
       observacao: controls.observacao.value,
-      unidade_medida: controls.unidade_medida.value,
+      unidade_medida: this.medidas[controls.unidade_medida.value -1],
     };
 
     return produto;
+  }
+
+  voltar(){
+    this.router.navigate(["../lista-de-produtos"], {});
   }
 }

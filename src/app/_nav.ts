@@ -1,38 +1,43 @@
-import { INavData } from '@coreui/angular';
+import { INavData } from "@coreui/angular";
 
 export const navItems: INavData[] = [
   {
-    name: 'Dashboard',
-    url: '/dashboard',
-    icon: 'icon-speedometer',
+    name: "Dashboard",
+    url: "/dashboard",
+    icon: "icon-speedometer",
     badge: {
-      variant: 'info',
-      text: 'NEW'
-    }
-  },  
-    {
-      // name: 'Pedidos',
-      name: 'Link2',
-      url: '/lista-de-pedidos',
-      icon: 'icon-note'
+      variant: "info",
+      text: "NEW",
     },
-    {
-      // name: 'Produtos',
-      name: 'Link3',
-      url: '/lista-de-produtos',
-      icon: 'icon-layers'
-    },
-    {
-      // name: 'Usuários',
-      name: 'Link4',
-      url: '/lista-de-usuario',
-      icon: 'icon-people'
-    },
-    {
-        name: 'Link5',
-        url: '/cadastro-produtos',
-        icon: 'icon-drop'
-      },
+  },
+  {
+    // name: 'Pedidos',
+    name: "Link2",
+    url: "/lista-de-pedidos",
+    icon: "icon-note",
+  },
+  {
+    // name: 'Produtos',
+    name: "Link3",
+    url: "/lista-de-produtos",
+    icon: "icon-layers",
+  },
+  {
+    // name: 'Usuários',
+    name: "Link4",
+    url: "/lista-de-usuario",
+    icon: "icon-people",
+  },
+  {
+    name: "Link5",
+    url: "/cadastro-produtos",
+    icon: "icon-drop",
+  },
+  {
+    name: "Link6",
+    url: "/catalogo",
+    icon: "icon-drop",
+  },
 
   // {
   //   title: true,

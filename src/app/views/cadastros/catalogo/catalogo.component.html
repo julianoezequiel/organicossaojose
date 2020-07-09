@@ -1,0 +1,16 @@
+<mat-card class="shipping-card">
+  <mat-card-header>
+    <mat-card-title>Shipping Information </mat-card-title>
+  </mat-card-header>
+  <mat-card-actions>
+    <button  style="float: left;margin: 15px;" mat-button mat-raised-button color="primary" type="button" (click)="openDialog()">Adicionar</button>  
+  </mat-card-actions>
+  <div fxFlex="100%" style="height: 40px;"></div>
+  <mat-card-content >
+    <mat-selection-list #shoes>
+        <mat-list-option *ngFor="let shoe of typesOfShoes">
+            {{shoe}}
+        </mat-list-option>
+    </mat-selection-list>
+  </mat-card-content>
+</mat-card>

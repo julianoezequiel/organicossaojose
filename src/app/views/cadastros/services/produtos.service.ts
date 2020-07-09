@@ -32,4 +32,8 @@ export class ProdutosService {
   read_all() {
     return this.firestore.collection(this.collectionName).snapshotChanges();
   }
+
+  delete(record_id) {
+    return this.firestore.collection(this.collectionName).doc(record_id).delete();
+  }
 }

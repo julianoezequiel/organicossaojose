@@ -1,8 +1,10 @@
 <mat-card class="shipping-card">
   <mat-card-header>
-    <mat-card-title>Shipping Information</mat-card-title>
+    <mat-card-title>Shipping Information
+    </mat-card-title>   
   </mat-card-header>
   <div class="mat-elevation-z8">
+    <button  style="float: left;margin: 15px;" mat-raised-button color="primary" type="button" (click)="adicionar()">Adicionar</button>
     <table mat-table class="full-width-table" matSort aria-label="Elements">
       <!-- Id Column -->
       <ng-container matColumnDef="descricao">
@@ -39,7 +41,7 @@
             color="warn"
             matTooltip="Excluir produto"
             type="button"
-            (click)="excluir(m)"
+            (click)="confirmDialog(m)"
           >
             <mat-icon>delete</mat-icon>
           </button>

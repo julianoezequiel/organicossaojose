@@ -20,6 +20,7 @@ import { TesteFormComponent } from './views/cadastros/teste-form/teste-form.comp
 import { ListaUsuariosComponent } from './views/cadastros/lista-usuarios/lista-usuarios.component';
 import { ListaPedidosComponent } from './views/cadastros/lista-pedidos/lista-pedidos.component';
 import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-produtos.component';
+import { CatalogoComponent } from './views/cadastros/catalogo/catalogo.component';
 
 export const routes: Routes = [
   {
@@ -125,6 +126,20 @@ export const routes: Routes = [
         component: CadastroUsuariosComponent,
         data: {
           title: 'Editar Usuário'
+        }
+      },
+      {
+        path: 'catalogo',
+        component: CatalogoComponent,
+        data: {
+          title: 'Novo Catálogo'
+        }
+      },
+      {
+        path: 'catalogo/:id',
+        component: CatalogoComponent,
+        data: {
+          title: 'Editar catálogo'
         }
       },
       {

@@ -1,5 +1,5 @@
 import { ProdutoPedido } from './produto-pedido.model';
-import { FormaSPagamentos } from './formas-pagamento.enum';
+import { FormasPagamentos } from './formas-pagamento.enum';
 
 export class Pedido {
     data:Date;
@@ -7,5 +7,7 @@ export class Pedido {
     produto_pedido:ProdutoPedido[];
     total_pedido:number;
     status:Status;
-    forma_pagamento:FormaSPagamentos;
+    forma_pagamento:FormasPagamentos;
+    dia_entrega:DiaSemana;
+    pago:boolean;
 }

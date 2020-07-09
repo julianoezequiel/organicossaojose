@@ -74,9 +74,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-produtos.component';
 import { ListaPedidosComponent } from './views/cadastros/lista-pedidos/lista-pedidos.component';
 import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historico-pedidos/lista-historico-pedidos.component';
+import { ConfirmDialogComponent } from './views/confirm-dialog/confirm-dialog.component';
+import { CatalogoComponent } from './views/cadastros/catalogo/catalogo.component';
+import { ListaProdutosCatalogoComponent } from './views/cadastros/catalogo/lista-produtos-catalogo/lista-produtos-catalogo.component';
 
 @NgModule({
   imports: [
@@ -111,7 +116,8 @@ import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historic
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule
   ],
   declarations: [
     AppComponent,
@@ -132,15 +138,21 @@ import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historic
     TesteFormComponent,
     ListaProdutosComponent,
     ListaPedidosComponent,
-    ListaHistoricoPedidosComponent
+    ListaHistoricoPedidosComponent,
+    ConfirmDialogComponent,
+    CatalogoComponent,
+    ListaProdutosCatalogoComponent
   ],
   providers: [{
     provide: LocationStrategy,
     useClass: HashLocationStrategy,
+    
   },
   AuthService,
-  AuthGuard
+  AuthGuard,  
+  
 ],
+  entryComponents: [ConfirmDialogComponent,ListaProdutosCatalogoComponent],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

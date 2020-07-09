@@ -1,5 +1,4 @@
 import { Produto } from './produto.model';
-import { FormaSPagamentos } from './formas-pagamento.enum';
 
 export interface Catalogo{
     data_entrega:Date;

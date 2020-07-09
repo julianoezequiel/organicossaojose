@@ -1,4 +1,4 @@
-export enum FormaSPagamentos{
+export enum FormasPagamentos{
     DINHEIRO,
     DEBITO,
     TRANFERENCIA,

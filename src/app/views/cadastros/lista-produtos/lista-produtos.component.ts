@@ -9,6 +9,9 @@ import {
 import { Produto } from "../model/produto.model";
 import { ProdutosService } from "../services/produtos.service";
 import { Router, ActivatedRoute } from "@angular/router";
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent, ConfirmDialogModel } from '../../confirm-dialog/confirm-dialog.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "lista-produtos",
@@ -25,7 +28,9 @@ export class ListaProdutosComponent implements AfterViewInit, OnInit {
   constructor(
     public produtosService: ProdutosService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public dialog: MatDialog,
+    private toastr: ToastrService,
   ) {}
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ["descricao", "valor", "unidade", "acoes"];
@@ -52,5 +57,37 @@ export class ListaProdutosComponent implements AfterViewInit, OnInit {
     this.router.navigate(["../cadastro-produtos", id], {
       relativeTo: this.activatedRoute,
     });
+  }
+
+  confirmDialog(m): void {
+    const message = `Deseja excluir o produto?`;
+
+    const dialogData = new ConfirmDialogModel("Confirmar", message);
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if(dialogResult == true){
+        this.excluir(m);
+      }
+    });
+  }
+
+  excluir(m:Produto){
+    if(m._id){
+      this.produtosService.delete(m._id).then(()=>{
+        this.toastr.success("Produto excluído com sucesso", "Atenção!", {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+        this.dataSource.carregarDados().then((data) => {
+          this.table.dataSource = data;
+        });
+      });
+    }
   }
 }

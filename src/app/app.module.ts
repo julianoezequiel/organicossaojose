@@ -51,11 +51,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { ToastrModule } from 'ngx-toastr';
 import { AuthGuard } from './views/guard/auth.guard';
-import { ListagemUsuariosComponent } from './views/cadastros/listagem-usuarios/listagem-usuarios.component';
 import { CadastroUsuariosComponent } from './views/cadastros/cadastro-usuarios/cadastro-usuarios.component';
-import { ListagemProdutosComponent } from './views/cadastros/listagem-produtos/listagem-produtos.component';
 import { CadastroProdutosComponent } from './views/cadastros/cadastro-produtos/cadastro-produtos.component';
-import { ListagemPedidosComponent } from './views/cadastros/listagem-pedidos/listagem-pedidos.component';
 import { HistoricoPedidosComponent } from './views/cadastros/historico-pedidos/historico-pedidos.component';
 import { CadastroPedidosComponent } from './views/cadastros/cadastro-pedidos/cadastro-pedidos.component';
 import { ListaUsuariosComponent } from './views/cadastros/lista-usuarios/lista-usuarios.component';
@@ -75,6 +72,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatNativeDateModule, MatRippleModule, MAT_DATE_LOCALE} from '@angular/material/core';
+
 
 import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-produtos.component';
 import { ListaPedidosComponent } from './views/cadastros/lista-pedidos/lista-pedidos.component';
@@ -82,6 +82,9 @@ import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historic
 import { ConfirmDialogComponent } from './views/confirm-dialog/confirm-dialog.component';
 import { CatalogoComponent } from './views/cadastros/catalogo/catalogo.component';
 import { ListaProdutosCatalogoComponent } from './views/cadastros/catalogo/lista-produtos-catalogo/lista-produtos-catalogo.component';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { CatalogoService } from './views/cadastros/services/catalogo.service';
+import { ListaCatalogosComponent } from './views/cadastros/lista-catalogos/lista-catalogos.component';
 
 @NgModule({
   imports: [
@@ -117,7 +120,9 @@ import { ListaProdutosCatalogoComponent } from './views/cadastros/catalogo/lista
     MatSelectModule,
     MatRadioModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   declarations: [
     AppComponent,
@@ -126,11 +131,8 @@ import { ListaProdutosCatalogoComponent } from './views/cadastros/catalogo/lista
     P500Component,
     LoginComponent,
     RegisterComponent,
-    ListagemUsuariosComponent,
     CadastroUsuariosComponent,
-    ListagemProdutosComponent,
     CadastroProdutosComponent,
-    ListagemPedidosComponent,
     HistoricoPedidosComponent,
     CadastroPedidosComponent,
     ListaUsuariosComponent,
@@ -141,7 +143,8 @@ import { ListaProdutosCatalogoComponent } from './views/cadastros/catalogo/lista
     ListaHistoricoPedidosComponent,
     ConfirmDialogComponent,
     CatalogoComponent,
-    ListaProdutosCatalogoComponent
+    ListaProdutosCatalogoComponent,
+    ListaCatalogosComponent
   ],
   providers: [{
     provide: LocationStrategy,
@@ -149,7 +152,11 @@ import { ListaProdutosCatalogoComponent } from './views/cadastros/catalogo/lista
     
   },
   AuthService,
-  AuthGuard,  
+  AuthGuard,
+  CatalogoService,
+  { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+  {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
+
   
 ],
   entryComponents: [ConfirmDialogComponent,ListaProdutosCatalogoComponent],

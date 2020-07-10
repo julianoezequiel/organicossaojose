@@ -36,4 +36,23 @@ export class ProdutosService {
   delete(record_id) {
     return this.firestore.collection(this.collectionName).doc(record_id).delete();
   }
+
+  listar():Promise<Produto[]>{
+    return new Promise<Produto[]>((acept,reject)=>{
+     this.read_all().subscribe((data)=>{
+        let lista:Produto[]= data.map((e)=>{
+         return {
+           _id: e.payload.doc.id,
+           descricao: e.payload.doc.data()["descricao"],
+           limite: e.payload.doc.data()["limite"],
+           observacao: e.payload.doc.data()["observacao"],
+           unidade_medida:e.payload.doc.data()["unidade_medida"],
+           valorA:e.payload.doc.data()["valorA"],
+           valorB:e.payload.doc.data()["valorB"]
+         }
+       })
+       acept(lista);
+     });
+    })
+   }
 }

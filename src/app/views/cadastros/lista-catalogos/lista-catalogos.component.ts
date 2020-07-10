@@ -1,29 +1,20 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTable } from "@angular/material/table";
-import { ListaProdutosDataSource } from "./lista-produtos-datasource";
-import { Produto } from "../model/produto.model";
-import { ProdutosService } from "../services/produtos.service";
-import { Router, ActivatedRoute } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import {
-  ConfirmDialogComponent,
-  ConfirmDialogModel,
-} from "../../confirm-dialog/confirm-dialog.component";
-import { ToastrService } from "ngx-toastr";
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTable } from '@angular/material/table';
 
 @Component({
-  selector: "lista-produtos",
-  templateUrl: "./lista-produtos.component.html",
-  styleUrls: ["./lista-produtos.component.css"],
+  selector: 'app-lista-catalogos',
+  templateUrl: './lista-catalogos.component.html',
+  styleUrls: ['./lista-catalogos.component.css']
 })
-export class ListaProdutosComponent implements AfterViewInit, OnInit {
+export class ListaCatalogosComponent implements AfterViewInit, OnInit {
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<Produto>;
+  @ViewChild(MatTable) table: MatTable<Catalogo>;
 
-  dataSource: ListaProdutosDataSource;
+  dataSource: ListaCatalogoDataSource;
 
   constructor(
     public produtosService: ProdutosService,
@@ -90,4 +81,5 @@ export class ListaProdutosComponent implements AfterViewInit, OnInit {
       });
     }
   }
+
 }

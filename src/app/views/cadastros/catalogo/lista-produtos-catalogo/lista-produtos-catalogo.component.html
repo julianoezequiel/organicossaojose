@@ -1,17 +1,19 @@
-<mat-card class="shipping-card">
-    <mat-card-header>
-      <mat-card-title>Shipping Information </mat-card-title>
-    </mat-card-header>
-    <mat-card-actions>
-      <button  style="float: left;margin: 15px;" mat-button mat-raised-button color="primary" type="button" (click)="onNoClick()">Adicionar</button>  
-    </mat-card-actions>
-    <div fxFlex="100%" style="height: 40px;"></div>
-    <mat-card-content >
-      <mat-selection-list #shoes>
-          <mat-list-option *ngFor="let shoe of item">
-              {{shoe}}
-          </mat-list-option>
-      </mat-selection-list>
-    </mat-card-content>
-  </mat-card>
-  
+<mat-dialog-content class="mat-typography">
+  <mat-list>
+    <mat-list-item *ngIf="isLoading">
+      Carregando
+    </mat-list-item>
+    <mat-list-item *ngIf="listaOriginal.length==0 && !isLoading">
+      Não existe itens para selecionar
+    </mat-list-item>
+    <mat-list-item *ngFor="let prod of listaOriginal">    
+      <button mat-icon-button color="accent">
+        <mat-icon (click)="addItem(prod)">add_circle</mat-icon>
+      </button>
+      {{ prod.descricao }}
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Fechar</button>
+</mat-dialog-actions>

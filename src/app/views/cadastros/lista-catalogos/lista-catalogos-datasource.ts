@@ -3,31 +3,29 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { Produto } from '../model/produto.model';
-import { ProdutosService } from '../services/produtos.service';
-import { promise } from 'protractor';
+import { CatalogoService } from '../services/catalogo.service';
+import { Catalogo } from '../model/catalogo.model';
 
-export class ListaProdutosDataSource extends DataSource<Produto> {
-  data: Produto[] = [];
+export class ListaCatalogoDataSource extends DataSource<Catalogo> {
+  data: Catalogo[] = [];
   paginator: MatPaginator;
   sort: MatSort;
 
-  constructor(public produtosService:ProdutosService) {
+  constructor(public catalogoService:CatalogoService) {
     super();   
   }
 
-  carregarDados():Promise<Produto[]>{
-   return new Promise<Produto[]>((acept,reject)=>{
-    this.produtosService.read_all().subscribe((data)=>{
+  carregarDados():Promise<Catalogo[]>{
+   return new Promise<Catalogo[]>((acept,reject)=>{
+    this.catalogoService.read_all().subscribe((data)=>{
       this.data = data.map((e)=>{
         return {
-          _id: e.payload.doc.id,
-          descricao: e.payload.doc.data()["descricao"],
-          limite: e.payload.doc.data()["limite"],
-          observacao: e.payload.doc.data()["observacao"],
-          unidade_medida:e.payload.doc.data()["unidade_medida"],
-          valorA:e.payload.doc.data()["valorA"],
-          valorB:e.payload.doc.data()["valorB"]
+            _id: e.payload.doc.id,
+            produtos: e.payload.doc.data()["produtos"],
+            data_entrega: e.payload.doc.data()["data_entrega"],
+            dia_confirmar: e.payload.doc.data()["dia_confirmar"],
+            hora_confirmar: e.payload.doc.data()["hora_confirmar"],
+            hora_inicio_entrega: e.payload.doc.data()["hora_inicio_entrega"],
         }
       })
       acept(this.data);
@@ -40,7 +38,7 @@ export class ListaProdutosDataSource extends DataSource<Produto> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<Produto[]> {
+  connect(): Observable<Catalogo[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
@@ -64,7 +62,7 @@ export class ListaProdutosDataSource extends DataSource<Produto> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: Produto[]) {
+  private getPagedData(data: Catalogo[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -73,7 +71,7 @@ export class ListaProdutosDataSource extends DataSource<Produto> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: Produto[]) {
+  private getSortedData(data: Catalogo[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -81,7 +79,7 @@ export class ListaProdutosDataSource extends DataSource<Produto> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.descricao, b.descricao, isAsc);
+        case 'name': return compareDate(a.data_entrega, b.data_entrega, isAsc);
         case 'id': return compare(+a._id, +b._id, isAsc);
         default: return 0;
       }
@@ -89,7 +87,10 @@ export class ListaProdutosDataSource extends DataSource<Produto> {
   }
 }
 
-/** Simple sort comparator for example ID/Name columns (for client-side sorting). */
 function compare(a: string | number, b: string | number, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
+
+function compareDate(a: Date, b: Date, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

@@ -2,6 +2,14 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
+import { ListaCatalogoDataSource } from './lista-catalogos-datasource';
+import { Catalogo } from '../model/catalogo.model';
+import { ProdutosService } from '../services/produtos.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { CatalogoService } from '../services/catalogo.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-lista-catalogos',
@@ -17,7 +25,7 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
   dataSource: ListaCatalogoDataSource;
 
   constructor(
-    public produtosService: ProdutosService,
+    public catalogoService: CatalogoService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
@@ -27,7 +35,7 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
   displayedColumns = ["descricao", "valor", "unidade", "acoes"];
 
   ngOnInit() {
-    this.dataSource = new ListaProdutosDataSource(this.produtosService);
+    this.dataSource = new ListaCatalogoDataSource(this.catalogoService);
     this.dataSource.carregarDados().then((data) => {
       this.table.dataSource = data;
     });
@@ -67,9 +75,9 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
     });
   }
 
-  excluir(m: Produto) {
+  excluir(m: Catalogo) {
     if (m._id) {
-      this.produtosService.delete(m._id).then(() => {
+      this.catalogoService.delete(m._id).then(() => {
         this.toastr.success("Produto excluído com sucesso", "Atenção!", {
           closeButton: true,
           progressAnimation: "decreasing",

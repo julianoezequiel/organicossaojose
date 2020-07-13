@@ -81,11 +81,11 @@ import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-p
 import { ListaPedidosComponent } from './views/cadastros/lista-pedidos/lista-pedidos.component';
 import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historico-pedidos/lista-historico-pedidos.component';
 import { ConfirmDialogComponent } from './views/confirm-dialog/confirm-dialog.component';
-import { CatalogoComponent } from './views/cadastros/catalogo/catalogo.component';
-import { ListaProdutosCatalogoComponent } from './views/cadastros/catalogo/lista-produtos-catalogo/lista-produtos-catalogo.component';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { CatalogoService } from './views/cadastros/services/catalogo.service';
 import { ListaCatalogosComponent } from './views/cadastros/lista-catalogos/lista-catalogos.component';
+import { CatalogoComponent } from './views/cadastros/cadastro-catalogo/catalogo.component';
+import { ListaProdutosCatalogoComponent } from './views/cadastros/cadastro-catalogo/lista-produtos-catalogo/lista-produtos-catalogo.component';
 
 @NgModule({
   imports: [

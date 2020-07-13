@@ -1,93 +1,81 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { ProdutosService } from "../services/produtos.service";
+import { MatDialog } from "@angular/material/dialog";
+import { Router, ActivatedRoute } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
+import { CatalogoService } from "../services/catalogo.service";
+import { Subscription } from "rxjs";
+import { Pedido } from "../model/pedido.model";
+import { DiaSemana } from "../model/dia-semana.enum";
+import { FormasPagamentos } from "../model/formas-pagamento.enum";
+import { Status } from "../model/status.enum";
 
 @Component({
-  selector: 'cadastro-pedidos',
-  templateUrl: './cadastro-pedidos.component.html',
-  styleUrls: ['./cadastro-pedidos.component.css']
+  selector: "cadastro-pedidos",
+  templateUrl: "./cadastro-pedidos.component.html",
+  styleUrls: ["./cadastro-pedidos.component.css"],
 })
-export class CadastroPedidosComponent {
-  addressForm = this.fb.group({
-    company: null,
-    firstName: [null, Validators.required],
-    lastName: [null, Validators.required],
-    address: [null, Validators.required],
-    address2: null,
-    city: [null, Validators.required],
-    state: [null, Validators.required],
-    postalCode: [null, Validators.compose([
-      Validators.required, Validators.minLength(5), Validators.maxLength(5)])
-    ],
-    shipping: ['free', Validators.required]
-  });
+export class CadastroPedidosComponent implements OnInit {
+  private subscriptions: Subscription[] = [];
 
-  hasUnitNumber = false;
+  forma_pagamento : FormasPagamentos[] = [];
+  pedidoForm: FormGroup;
+  dia_semana: DiaSemana[] = [];
 
-  states = [
-    {name: 'Alabama', abbreviation: 'AL'},
-    {name: 'Alaska', abbreviation: 'AK'},
-    {name: 'American Samoa', abbreviation: 'AS'},
-    {name: 'Arizona', abbreviation: 'AZ'},
-    {name: 'Arkansas', abbreviation: 'AR'},
-    {name: 'California', abbreviation: 'CA'},
-    {name: 'Colorado', abbreviation: 'CO'},
-    {name: 'Connecticut', abbreviation: 'CT'},
-    {name: 'Delaware', abbreviation: 'DE'},
-    {name: 'District Of Columbia', abbreviation: 'DC'},
-    {name: 'Federated States Of Micronesia', abbreviation: 'FM'},
-    {name: 'Florida', abbreviation: 'FL'},
-    {name: 'Georgia', abbreviation: 'GA'},
-    {name: 'Guam', abbreviation: 'GU'},
-    {name: 'Hawaii', abbreviation: 'HI'},
-    {name: 'Idaho', abbreviation: 'ID'},
-    {name: 'Illinois', abbreviation: 'IL'},
-    {name: 'Indiana', abbreviation: 'IN'},
-    {name: 'Iowa', abbreviation: 'IA'},
-    {name: 'Kansas', abbreviation: 'KS'},
-    {name: 'Kentucky', abbreviation: 'KY'},
-    {name: 'Louisiana', abbreviation: 'LA'},
-    {name: 'Maine', abbreviation: 'ME'},
-    {name: 'Marshall Islands', abbreviation: 'MH'},
-    {name: 'Maryland', abbreviation: 'MD'},
-    {name: 'Massachusetts', abbreviation: 'MA'},
-    {name: 'Michigan', abbreviation: 'MI'},
-    {name: 'Minnesota', abbreviation: 'MN'},
-    {name: 'Mississippi', abbreviation: 'MS'},
-    {name: 'Missouri', abbreviation: 'MO'},
-    {name: 'Montana', abbreviation: 'MT'},
-    {name: 'Nebraska', abbreviation: 'NE'},
-    {name: 'Nevada', abbreviation: 'NV'},
-    {name: 'New Hampshire', abbreviation: 'NH'},
-    {name: 'New Jersey', abbreviation: 'NJ'},
-    {name: 'New Mexico', abbreviation: 'NM'},
-    {name: 'New York', abbreviation: 'NY'},
-    {name: 'North Carolina', abbreviation: 'NC'},
-    {name: 'North Dakota', abbreviation: 'ND'},
-    {name: 'Northern Mariana Islands', abbreviation: 'MP'},
-    {name: 'Ohio', abbreviation: 'OH'},
-    {name: 'Oklahoma', abbreviation: 'OK'},
-    {name: 'Oregon', abbreviation: 'OR'},
-    {name: 'Palau', abbreviation: 'PW'},
-    {name: 'Pennsylvania', abbreviation: 'PA'},
-    {name: 'Puerto Rico', abbreviation: 'PR'},
-    {name: 'Rhode Island', abbreviation: 'RI'},
-    {name: 'South Carolina', abbreviation: 'SC'},
-    {name: 'South Dakota', abbreviation: 'SD'},
-    {name: 'Tennessee', abbreviation: 'TN'},
-    {name: 'Texas', abbreviation: 'TX'},
-    {name: 'Utah', abbreviation: 'UT'},
-    {name: 'Vermont', abbreviation: 'VT'},
-    {name: 'Virgin Islands', abbreviation: 'VI'},
-    {name: 'Virginia', abbreviation: 'VA'},
-    {name: 'Washington', abbreviation: 'WA'},
-    {name: 'West Virginia', abbreviation: 'WV'},
-    {name: 'Wisconsin', abbreviation: 'WI'},
-    {name: 'Wyoming', abbreviation: 'WY'}
-  ];
+  pedido: Pedido = {
+    _id:'',
+    data: new Date(),
+    dia_entrega: DiaSemana.SABADO,
+    forma_pagamento: FormasPagamentos.DINHEIRO,
+    numero_celular: "",
+    pago: false,
+    produto_pedido: [],
+    status: Status.EM_ANDAMENTO,
+    total_pedido: 0,
+  };
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    public produtosService: ProdutosService,
+    public dialog: MatDialog,
+    private router: Router,
+    private toastr: ToastrService,
+    private catalogoService: CatalogoService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   onSubmit() {
-    alert('Thanks!');
+    alert("Thanks!");
+  }
+
+  ngOnInit() {
+    this.dia_semana.push(DiaSemana.QUINTA);
+    this.dia_semana.push(DiaSemana.SEXTA);
+    this.dia_semana.push(DiaSemana.SABADO);
+    this.forma_pagamento.push(FormasPagamentos.BOLETO);
+    this.forma_pagamento.push(FormasPagamentos.DEBITO);
+    this.forma_pagamento.push(FormasPagamentos.DINHEIRO);
+    this.forma_pagamento.push(FormasPagamentos.TRANFERENCIA);
+    this.createForm();
+  }
+  createForm() {
+    this.pedidoForm = this.fb.group({
+      _id: [this.pedido._id],
+      data: [this.pedido.data, Validators.required],
+      dia_entrega: [this.pedido.dia_entrega],
+      numero_celular: [this.pedido.numero_celular, Validators.required],
+      pago: [this.pedido.pago],
+      produto_pedido: [this.pedido.produto_pedido],
+      status: [this.pedido?.status, Validators.required],
+      total_pedido: [this.pedido?.total_pedido, Validators.required],
+      forma_pagamento: [this.pedido?.forma_pagamento, Validators.required],
+    });
+  }
+
+  voltar() {
+    this.router.navigate(["../", ""], {
+      relativeTo: this.activatedRoute,
+    });
   }
 }

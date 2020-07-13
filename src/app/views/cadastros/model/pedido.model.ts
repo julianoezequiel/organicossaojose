@@ -5,6 +5,7 @@ import { Status } from './status.enum';
 
 export class Pedido {
     data:Date;
+    _id:string;
     numero_celular:string;
     produto_pedido:ProdutoPedido[];
     total_pedido:number;

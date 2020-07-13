@@ -1,10 +1,11 @@
 <mat-card class="shipping-card">
     <mat-card-header>
-      <mat-card-title>Shipping Information
+      <mat-card-title>Catalogos
       </mat-card-title>   
     </mat-card-header>
     <div class="mat-elevation-z8">
-      <button  style="float: left;margin: 15px;" mat-raised-button color="primary" type="button" (click)="adicionar()">Adicionar</button>
+      <button  style="float: left;margin: 15px;" mat-raised-button color="primary" 
+      type="button" (click)="adicionar()">Criar Catálogo</button>
       <table mat-table class="full-width-table" matSort aria-label="Elements">
         <!-- Id Column -->
         <ng-container matColumnDef="data">
@@ -49,8 +50,8 @@
         #paginator
         [length]="dataSource?.data.length"
         [pageIndex]="0"
-        [pageSize]="50"
-        [pageSizeOptions]="[25, 50, 100, 250]"
+        [pageSize]="10"
+        [pageSizeOptions]="[10,25, 50, 100, 250]"
       >
       </mat-paginator>
     </div>

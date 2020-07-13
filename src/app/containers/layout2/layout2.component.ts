@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './default-layout.component.html'
+  templateUrl: './layout2.component.html'
 })
-export class DefaultLayoutComponent {
+export class Layout2Component {
   public sidebarMinimized = false;
   public navItems = navItems;
 
@@ -19,6 +19,7 @@ export class DefaultLayoutComponent {
   }
 
   logout(){
+    alert("sair");
     localStorage.removeItem('user');
     this.router.navigate(["login"]);
   }

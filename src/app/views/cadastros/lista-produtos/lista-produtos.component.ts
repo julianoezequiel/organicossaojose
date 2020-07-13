@@ -36,19 +36,22 @@ export class ListaProdutosComponent implements AfterViewInit, OnInit {
   displayedColumns = ["descricao", "valor", "unidade", "acoes"];
 
   ngOnInit() {
-    this.dataSource = new ListaProdutosDataSource(this.produtosService);
-    this.dataSource.carregarDados().then((data) => {
-      this.table.dataSource = data;
-    });
+   
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.dataSource = new ListaProdutosDataSource(this.produtosService);
+    this.dataSource.carregarDados().then((data) => {
+      this.table.dataSource = data;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    });
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
   }
 
   adicionar() {
-    this.router.navigate(["../cadastro-produtos", ""], {
+    this.router.navigate(["../cadastro-produtos"], {
       relativeTo: this.activatedRoute,
     });
   }

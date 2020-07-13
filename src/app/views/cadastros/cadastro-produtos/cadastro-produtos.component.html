@@ -1,14 +1,15 @@
 <form [formGroup]="produtoForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="shipping-card">
     <mat-card-header>
-        <mat-card-title>Shipping Information</mat-card-title>       
+        <mat-card-title>Cadastrar Produto</mat-card-title>       
     </mat-card-header>
     
     <mat-card-content>
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
-            <input matInput placeholder="Descrição" formControlName="descricao">
+              <mat-label>Descrição</mat-label>
+            <input matInput placeholder="Informe uma breve descrição para o produto" formControlName="descricao">
             <mat-error *ngIf="produtoForm.controls['descricao'].hasError('required')">
               Descrição é <strong>obrigatória</strong>
             </mat-error>
@@ -18,14 +19,17 @@
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
+              <mat-label>Valor Inicial</mat-label>
             <input matInput placeholder="Valor R$" formControlName="valorA"  type="number" step="0.10">
             <mat-error *ngIf="produtoForm.controls['valorA'].hasError('required')">
               Valor é <strong>obrigatório</strong>
             </mat-error>
+            <mat-hint>R$</mat-hint>
           </mat-form-field>
         </div>
         <div class="col">
           <mat-form-field class="full-width">
+              <mat-label>Tipo de unidade</mat-label>
             <mat-select placeholder="Unidade Medida" formControlName="unidade_medida">
               <mat-option *ngFor="let state of medidas" [value]="state.id">
                 {{ state.descricao }}
@@ -38,13 +42,16 @@
         </div>
         <div class="col">
           <mat-form-field class="full-width">
+              <mat-label>Valor com desconto</mat-label>
             <input matInput placeholder="Valor com desconto R$" formControlName="valorB"  type="number" step="0.10">            
+            <mat-hint>R$</mat-hint>
           </mat-form-field>
         </div>
         <div class="col">
           <mat-form-field class="full-width">
+              <mat-label>Limite para o início do desconto</mat-label>
             <input matInput placeholder="Limite valor 1" formControlName="limite" type="number" step="1">
-            <mat-hint>valor 1 * quantidade</mat-hint>
+            <mat-hint>valor inicial * quantidade</mat-hint>
           </mat-form-field>
         </div>       
       </div>

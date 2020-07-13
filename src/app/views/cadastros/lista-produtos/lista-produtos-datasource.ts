@@ -81,8 +81,8 @@ export class ListaProdutosDataSource extends DataSource<Produto> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.descricao, b.descricao, isAsc);
-        case 'id': return compare(+a._id, +b._id, isAsc);
+        case 'descricao': return compare(a.descricao, b.descricao, isAsc);
+        case 'valor': return compare(+a.valorA, +b.valorA, isAsc);
         default: return 0;
       }
     });

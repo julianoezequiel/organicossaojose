@@ -5,44 +5,35 @@ export const navItems: INavData[] = [
     name: "Dashboard",
     url: "/dashboard",
     icon: "icon-speedometer",
-    badge: {
-      variant: "info",
-      text: "NEW",
-    },
+    // badge: {
+    //   variant: "info",
+    //   text: "NEW",
+    // },
   },
   {
     // name: 'Pedidos',
-    name: "Link2",
+    name: "Pedidos",
     url: "/lista-de-pedidos",
     icon: "icon-note",
   },
   {
     // name: 'Produtos',
-    name: "Link3",
+    name: "Produtos",
     url: "/lista-de-produtos",
     icon: "icon-layers",
   },
   {
-    // name: 'Usuários',
-    name: "Link4",
-    url: "/lista-de-usuario",
-    icon: "icon-people",
-  },
-  {
-    name: "Link5",
-    url: "/cadastro-produtos",
-    icon: "icon-drop",
-  },
-  {
-    name: "Link6",
-    url: "/catalogo",
-    icon: "icon-drop",
-  },
-  {
-    name: "Link7",
+    name: "Catálogos",
     url: "/lista-de-catalogo",
     icon: "icon-drop",
   },
+  {
+    // name: 'Usuários',
+    name: "Usuários",
+    url: "/lista-de-usuario",
+    icon: "icon-people",
+  },
+  
 
   // {
   //   title: true,

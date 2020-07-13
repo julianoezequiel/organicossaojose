@@ -23,10 +23,10 @@ export class CadastroProdutosComponent implements OnInit {
     _id: "",
     descricao: "",
     observacao: "",
-    unidade_medida: unidades[0],
+    unidade_medida: unidades[2],
     valorA: 0,
     valorB: 0,
-    limite: 2,
+    limite: 0,
   };
 
   constructor(

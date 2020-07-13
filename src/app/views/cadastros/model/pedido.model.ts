@@ -1,5 +1,7 @@
 import { ProdutoPedido } from './produto-pedido.model';
 import { FormasPagamentos } from './formas-pagamento.enum';
+import { DiaSemana } from './dia-semana.enum';
+import { Status } from './status.enum';
 
 export class Pedido {
     data:Date;

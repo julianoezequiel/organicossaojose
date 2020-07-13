@@ -32,7 +32,7 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
     private toastr: ToastrService
   ) {}
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ["descricao", "valor", "unidade", "acoes"];
+  displayedColumns = ["data","qtd", "acoes"];
 
   ngOnInit() {
     this.dataSource = new ListaCatalogoDataSource(this.catalogoService);
@@ -47,19 +47,19 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
   }
 
   adicionar() {
-    this.router.navigate(["../cadastro-produtos", ""], {
+    this.router.navigate(["../catalogo", ""], {
       relativeTo: this.activatedRoute,
     });
   }
 
   editar(id) {
-    this.router.navigate(["../cadastro-produtos", id], {
+    this.router.navigate(["../catalogo", id], {
       relativeTo: this.activatedRoute,
     });
   }
 
   confirmDialog(m): void {
-    const message = `Deseja excluir o produto?`;
+    const message = `Deseja excluir o catálogo?`;
 
     const dialogData = new ConfirmDialogModel("Confirmar", message);
 
@@ -78,7 +78,7 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
   excluir(m: Catalogo) {
     if (m._id) {
       this.catalogoService.delete(m._id).then(() => {
-        this.toastr.success("Produto excluído com sucesso", "Atenção!", {
+        this.toastr.success("Catálogo excluído com sucesso", "Atenção!", {
           closeButton: true,
           progressAnimation: "decreasing",
           progressBar: true,

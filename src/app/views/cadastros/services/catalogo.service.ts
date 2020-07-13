@@ -5,17 +5,15 @@ import {
 } from "@angular/fire/firestore";
 import { Produto } from "../model/produto.model";
 import { Catalogo } from "../model/catalogo.model";
+import { sanitizeIdentifier } from "@angular/compiler";
 
 @Injectable({
   providedIn: "root",
 })
 export class CatalogoService {
-  constructor(private firestore: AngularFirestore) {
-    
-  }
+  constructor(private firestore: AngularFirestore) {}
 
   collectionName = "catalogo";
-
 
   create(record: Catalogo) {
     console.log(record);
@@ -29,7 +27,7 @@ export class CatalogoService {
       .update(record);
   }
 
-  read(recordID): AngularFirestoreDocument<Catalogo> {
+  read(recordID): AngularFirestoreDocument {
     return this.firestore.collection(this.collectionName).doc(recordID);
   }
 
@@ -44,6 +42,35 @@ export class CatalogoService {
       .delete();
   }
 
+  buscarAtual(): Promise<Catalogo[]> {
+    return new Promise<Catalogo[]>((acept, reject) => {
+      let lista: Catalogo[] = [];
+      this.firestore
+        .collection(this.collectionName)
+        .ref.where("atual", "==", true)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            let c: Catalogo = {
+              _id: doc.id,
+              produtos: doc.data()["produtos"],
+              data_entrega: doc.data()["data_entrega"],
+              dia_confirmar: doc.data()["dia_confirmar"],
+              hora_confirmar: doc.data()["hora_confirmar"],
+              hora_inicio_entrega: doc.data()["hora_inicio_entrega"],
+              atual: doc.data()["atual"],
+              pedidos: doc.data()["pedidos"],
+            };
+            lista.push(c);
+          });
+          acept(lista);
+        })
+        .catch(() => {
+          reject();
+        });
+    });
+  }
+
   listar(): Promise<Catalogo[]> {
     return new Promise<Catalogo[]>((acept, reject) => {
       this.read_all().subscribe((data) => {
@@ -55,6 +82,8 @@ export class CatalogoService {
             dia_confirmar: e.payload.doc.data()["dia_confirmar"],
             hora_confirmar: e.payload.doc.data()["hora_confirmar"],
             hora_inicio_entrega: e.payload.doc.data()["hora_inicio_entrega"],
+            atual: e.payload.doc.data()["atual"],
+            pedidos: e.payload.doc.data()["pedidos"],
           };
         });
         acept(lista);

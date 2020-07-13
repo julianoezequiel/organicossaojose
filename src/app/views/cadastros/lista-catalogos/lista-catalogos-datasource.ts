@@ -26,6 +26,8 @@ export class ListaCatalogoDataSource extends DataSource<Catalogo> {
             dia_confirmar: e.payload.doc.data()["dia_confirmar"],
             hora_confirmar: e.payload.doc.data()["hora_confirmar"],
             hora_inicio_entrega: e.payload.doc.data()["hora_inicio_entrega"],
+            atual:e.payload.doc.data()["atual"],
+            pedidos:e.payload.doc.data()["pedidos"],
         }
       })
       acept(this.data);

@@ -38,6 +38,11 @@ export const navItems: INavData[] = [
     url: "/catalogo",
     icon: "icon-drop",
   },
+  {
+    name: "Link7",
+    url: "/lista-de-catalogo",
+    icon: "icon-drop",
+  },
 
   // {
   //   title: true,

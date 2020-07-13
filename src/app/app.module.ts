@@ -74,6 +74,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatNativeDateModule, MatRippleModule, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 
 import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-produtos.component';
@@ -122,7 +123,8 @@ import { ListaCatalogosComponent } from './views/cadastros/lista-catalogos/lista
     MatCardModule,
     MatDialogModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSlideToggleModule
   ],
   declarations: [
     AppComponent,

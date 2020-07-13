@@ -1,5 +1,6 @@
 import { Produto } from "./produto.model";
 import { DiaSemana } from "./dia-semana.enum";
+import { Pedido } from './pedido.model';
 
 export interface Catalogo {
   _id: string;
@@ -12,4 +13,8 @@ export interface Catalogo {
   hora_inicio_entrega: string;
 
   produtos: Produto[];
+
+  pedidos:Pedido[];
+
+  atual:boolean;
 }

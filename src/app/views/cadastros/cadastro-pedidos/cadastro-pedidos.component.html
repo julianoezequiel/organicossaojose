@@ -21,7 +21,7 @@
         <div class="col">
           <mat-form-field class="full-width">
             <mat-select placeholder="Selecione o dia para entrega" formControlName="dia_entrega">
-              <mat-option *ngFor="let dia of dia_entrega" [value]="dia">
+              <mat-option *ngFor="let dia of dia_semana" [value]="dia">
                 {{ dia }}
               </mat-option>
             </mat-select>
@@ -33,7 +33,7 @@
         <div class="col">
           <mat-form-field class="full-width">
             <mat-select placeholder="Unidade Medida" formControlName="forma_pagamento">
-              <mat-option *ngFor="let state of formaspagamento" [value]="state">
+              <mat-option *ngFor="let state of forma_pagamento" [value]="state">
                 {{ state }}
               </mat-option>
             </mat-select>

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -87,6 +87,11 @@ import { ListaCatalogosComponent } from './views/cadastros/lista-catalogos/lista
 import { CatalogoComponent } from './views/cadastros/cadastro-catalogo/catalogo.component';
 import { ListaProdutosCatalogoComponent } from './views/cadastros/cadastro-catalogo/lista-produtos-catalogo/lista-produtos-catalogo.component';
 
+import localePt from '@angular/common/locales/pt';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localePt, 'pt-BR');
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -158,6 +163,7 @@ import { ListaProdutosCatalogoComponent } from './views/cadastros/cadastro-catal
   CatalogoService,
   { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
+  { provide: LOCALE_ID, useValue: 'pt-BR' }    
 
   
 ],

@@ -6,14 +6,20 @@ import {
 import { Produto } from "../model/produto.model";
 import { Catalogo } from "../model/catalogo.model";
 import { sanitizeIdentifier } from "@angular/compiler";
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: "root",
 })
 export class CatalogoService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: AngularFirestore) {
+    this.datePipe = new DatePipe("pt-BR");
+    this.formato = "dd/MM/yyyy";
+  }
 
   collectionName = "catalogo";
+  datePipe: DatePipe; 
+  formato: string;
 
   create(record: Catalogo) {
     console.log(record);
@@ -55,6 +61,7 @@ export class CatalogoService {
               _id: doc.id,
               produtos: doc.data()["produtos"],
               data_entrega: doc.data()["data_entrega"],
+              data_string:'',
               dia_confirmar: doc.data()["dia_confirmar"],
               hora_confirmar: doc.data()["hora_confirmar"],
               hora_inicio_entrega: doc.data()["hora_inicio_entrega"],
@@ -79,6 +86,7 @@ export class CatalogoService {
             _id: e.payload.doc.id,
             produtos: e.payload.doc.data()["produtos"],
             data_entrega: e.payload.doc.data()["data_entrega"],
+            data_string: this.datePipe.transform(e.payload.doc.data()["data_entrega"].toDate(),this.formato),
             dia_confirmar: e.payload.doc.data()["dia_confirmar"],
             hora_confirmar: e.payload.doc.data()["hora_confirmar"],
             hora_inicio_entrega: e.payload.doc.data()["hora_inicio_entrega"],

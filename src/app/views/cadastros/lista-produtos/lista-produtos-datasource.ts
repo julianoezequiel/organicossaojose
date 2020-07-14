@@ -8,32 +8,14 @@ import { ProdutosService } from '../services/produtos.service';
 import { promise } from 'protractor';
 
 export class ListaProdutosDataSource extends DataSource<Produto> {
-  data: Produto[] = [];
+  data: Produto[] ;
   paginator: MatPaginator;
   sort: MatSort;
 
-  constructor(public produtosService:ProdutosService) {
+  constructor() {
     super();   
-  }
-
-  carregarDados():Promise<Produto[]>{
-   return new Promise<Produto[]>((acept,reject)=>{
-    this.produtosService.read_all().subscribe((data)=>{
-      this.data = data.map((e)=>{
-        return {
-          _id: e.payload.doc.id,
-          descricao: e.payload.doc.data()["descricao"],
-          limite: e.payload.doc.data()["limite"],
-          observacao: e.payload.doc.data()["observacao"],
-          unidade_medida:e.payload.doc.data()["unidade_medida"],
-          valorA:e.payload.doc.data()["valorA"],
-          valorB:e.payload.doc.data()["valorB"]
-        }
-      })
-      acept(this.data);
-    });
-   })
-  }
+  } 
+ 
 
   /**
    * Connect this data source to the table. The table will only update when
@@ -43,6 +25,7 @@ export class ListaProdutosDataSource extends DataSource<Produto> {
   connect(): Observable<Produto[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
+    
     const dataMutations = [
       observableOf(this.data),
       this.paginator.page,

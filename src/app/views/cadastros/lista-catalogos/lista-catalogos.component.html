@@ -4,13 +4,26 @@
       </mat-card-title>   
     </mat-card-header>
     <div class="mat-elevation-z8">
+
+      <div class="row">
+        <div class="col" style="margin: 15px 15px 15px 15px;">           
       <button  style="float: left;margin: 15px;" mat-raised-button color="primary" 
       type="button" (click)="adicionar()">Criar Catálogo</button>
-      <table mat-table class="full-width-table" matSort aria-label="Elements">
+        </div>
+        <div class="col" style="margin: 15px 15px 15px 15px;">
+          <mat-form-field class="input-full-width"  style="width: 100%;">
+            <mat-label>Buscar</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput (keyup)="applyFilter($event.target.value)" type="search" placeholder="Buscar">
+          </mat-form-field>
+       </div>
+      </div>
+    
+      <table mat-table class="full-width-table" aria-label="Elements" matSort [dataSource]="dataSource">
         <!-- Id Column -->
         <ng-container matColumnDef="data">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
-          <td mat-cell *matCellDef="let row">{{ row.data_entrega.toDate() | date: 'dd/MM/yyyy' }}</td>
+          <td mat-cell *matCellDef="let row">{{ row.data_string }}</td>
         </ng-container>
   
         <!-- Name Column -->

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ListaCatalogoDataSource } from './lista-catalogos-datasource';
 import { Catalogo } from '../model/catalogo.model';
 import { ProdutosService } from '../services/produtos.service';
@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { CatalogoService } from '../services/catalogo.service';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-lista-catalogos',
@@ -20,9 +21,11 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<Catalogo>;
 
-  dataSource: ListaCatalogoDataSource;
+  dataSource: MatTableDataSource<Catalogo>;
+  displayedColumns = ["data","qtd", "acoes"];
+  datePipe: DatePipe; 
+  formato: string;
 
   constructor(
     public catalogoService: CatalogoService,
@@ -30,14 +33,16 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     private toastr: ToastrService
-  ) {}
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ["data","qtd", "acoes"];
-
+  ) {
+    this.datePipe = new DatePipe("pt-BR");
+    this.formato = "dd/MM/yyyy";
+  }
+ 
   ngOnInit() {
-    this.dataSource = new ListaCatalogoDataSource(this.catalogoService);
-    this.dataSource.carregarDados().then((data) => {
-      this.table.dataSource = data;
+    this.catalogoService.listar().then((data) => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
 
@@ -83,11 +88,19 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
           progressAnimation: "decreasing",
           progressBar: true,
         });
-        this.dataSource.carregarDados().then((data) => {
-          this.table.dataSource = data;
+        this.catalogoService.listar().then((data) => {
+          this.dataSource = new MatTableDataSource(data);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
         });
       });
     }
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
 }

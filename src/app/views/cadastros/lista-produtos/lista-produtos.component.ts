@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { MatTable } from "@angular/material/table";
+import { MatTable, MatTableDataSource } from "@angular/material/table";
 import { ListaProdutosDataSource } from "./lista-produtos-datasource";
 import { Produto } from "../model/produto.model";
 import { ProdutosService } from "../services/produtos.service";
@@ -21,9 +21,11 @@ import { ToastrService } from "ngx-toastr";
 export class ListaProdutosComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<Produto>;
+  // @ViewChild(MatTable) table: MatTable<Produto>;
 
-  dataSource: ListaProdutosDataSource;
+  dataSource: MatTableDataSource<Produto>;
+
+  data :Produto[];
 
   constructor(
     public produtosService: ProdutosService,
@@ -35,19 +37,17 @@ export class ListaProdutosComponent implements AfterViewInit, OnInit {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ["descricao", "valor", "unidade", "acoes"];
 
-  ngOnInit() {
-   
-  }
-
-  ngAfterViewInit() {
-    this.dataSource = new ListaProdutosDataSource(this.produtosService);
-    this.dataSource.carregarDados().then((data) => {
-      this.table.dataSource = data;
+  async ngOnInit() {       
+    await this.produtosService.listar().then((data)=>{
+      this.data = data;      
+      this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
+  }
+
+  ngAfterViewInit() {        
+    
   }
 
   adicionar() {
@@ -87,10 +87,19 @@ export class ListaProdutosComponent implements AfterViewInit, OnInit {
           progressAnimation: "decreasing",
           progressBar: true,
         });
-        this.dataSource.carregarDados().then((data) => {
-          this.table.dataSource = data;
+        this.produtosService.listar().then((data)=>{
+          this.data = data;      
+          this.dataSource = new MatTableDataSource(this.data);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
         });
       });
     }
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 }

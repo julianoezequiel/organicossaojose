@@ -10,6 +10,7 @@ import { Pedido } from "../model/pedido.model";
 import { DiaSemana } from "../model/dia-semana.enum";
 import { FormasPagamentos } from "../model/formas-pagamento.enum";
 import { Status } from "../model/status.enum";
+import { Catalogo } from '../model/catalogo.model';
 
 @Component({
   selector: "cadastro-pedidos",
@@ -35,6 +36,8 @@ export class CadastroPedidosComponent implements OnInit {
     total_pedido: 0,
   };
 
+  catalogoAtual:Catalogo;
+
   constructor(
     private fb: FormBuilder,
     public produtosService: ProdutosService,
@@ -58,6 +61,7 @@ export class CadastroPedidosComponent implements OnInit {
     this.forma_pagamento.push(FormasPagamentos.DINHEIRO);
     this.forma_pagamento.push(FormasPagamentos.TRANFERENCIA);
     this.createForm();
+    this.listarCatAtual();
   }
   createForm() {
     this.pedidoForm = this.fb.group({
@@ -70,6 +74,16 @@ export class CadastroPedidosComponent implements OnInit {
       status: [this.pedido?.status, Validators.required],
       total_pedido: [this.pedido?.total_pedido, Validators.required],
       forma_pagamento: [this.pedido?.forma_pagamento, Validators.required],
+    });
+  }
+
+  listarCatAtual(){
+    this.catalogoService.buscarAtual().then((c)=>{   
+      if(c.length>0){   
+        this.catalogoAtual = c[0];
+      }else{
+        this.catalogoAtual = null;
+      }
     });
   }
 

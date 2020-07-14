@@ -7,6 +7,8 @@ export interface Catalogo {
 
   data_entrega: Date;
 
+  data_string:string;
+
   dia_confirmar: DiaSemana;
   hora_confirmar: string;
 

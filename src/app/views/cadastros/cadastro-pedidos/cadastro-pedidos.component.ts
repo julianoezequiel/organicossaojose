@@ -10,7 +10,11 @@ import { Pedido } from "../model/pedido.model";
 import { DiaSemana } from "../model/dia-semana.enum";
 import { FormasPagamentos } from "../model/formas-pagamento.enum";
 import { Status } from "../model/status.enum";
-import { Catalogo } from '../model/catalogo.model';
+import { Catalogo } from "../model/catalogo.model";
+import { PedidosService } from '../services/pedidos.service';
+import { Produto } from '../model/produto.model';
+import { ProdutoPedido } from '../model/produto-pedido.model';
+import { UnidadeMedida } from '../model/unidade-medida';
 
 @Component({
   selector: "cadastro-pedidos",
@@ -20,12 +24,14 @@ import { Catalogo } from '../model/catalogo.model';
 export class CadastroPedidosComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
-  forma_pagamento : FormasPagamentos[] = [];
+  forma_pagamento: FormasPagamentos[] = [];
   pedidoForm: FormGroup;
   dia_semana: DiaSemana[] = [];
+  produtos_disponoveis:Produto[]=[];
+  produtos_pedido:ProdutoPedido[]=[];
 
   pedido: Pedido = {
-    _id:'',
+    _id: "",
     data: new Date(),
     dia_entrega: DiaSemana.SABADO,
     forma_pagamento: FormasPagamentos.DINHEIRO,
@@ -36,7 +42,7 @@ export class CadastroPedidosComponent implements OnInit {
     total_pedido: 0,
   };
 
-  catalogoAtual:Catalogo;
+  catalogoAtual: Catalogo;
 
   constructor(
     private fb: FormBuilder,
@@ -45,13 +51,11 @@ export class CadastroPedidosComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     private catalogoService: CatalogoService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private pedidosService:PedidosService
   ) {}
 
-  onSubmit() {
-    alert("Thanks!");
-  }
-
+  
   ngOnInit() {
     this.dia_semana.push(DiaSemana.QUINTA);
     this.dia_semana.push(DiaSemana.SEXTA);
@@ -63,6 +67,67 @@ export class CadastroPedidosComponent implements OnInit {
     this.createForm();
     this.listarCatAtual();
   }
+
+  onSubmit() {
+    const controls = this.pedidoForm.controls;
+    let existeAtual :boolean = false;
+    /** check form */
+    if (this.pedidoForm.invalid) {
+      Object.keys(controls).forEach((controlName) =>
+        controls[controlName].markAsTouched()
+      );
+      return;
+    }
+
+    
+    const prod: Pedido = this.preparePedido();
+
+    if (prod._id) {
+      this.updatePedido(prod);
+      return;
+    }
+
+    this.addPedido(prod);
+  }
+
+  addPedido(p: Pedido) {
+    this.pedidosService.create(p).then(()=>{
+      this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
+        closeButton: true,
+        progressAnimation: "decreasing",
+        progressBar: true,
+      });
+      this.router.navigate(["../"], {});
+    });
+  }
+  updatePedido(p: Pedido) {
+    this.pedidosService.update(p._id,p).then(()=>{
+      this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
+        closeButton: true,
+        progressAnimation: "decreasing",
+        progressBar: true,
+      });
+      this.router.navigate(["../"], {});
+    });    
+  }
+  preparePedido(): Pedido {
+    const controls = this.pedidoForm.controls;
+
+    const p : Pedido ={
+      _id:controls._id.value,
+      data:controls.data.value,
+      dia_entrega:controls.dia_entrega.value,
+      forma_pagamento:controls.forma_pagamento.value,
+      numero_celular:controls.numero_celular.value,
+      pago:controls.pago.value,
+      produto_pedido:this.produtos_pedido,
+      status:controls.status.value,
+      total_pedido:controls.total_pedido.value,
+    }
+
+    return p;
+  }
+
   createForm() {
     this.pedidoForm = this.fb.group({
       _id: [this.pedido._id],
@@ -77,11 +142,11 @@ export class CadastroPedidosComponent implements OnInit {
     });
   }
 
-  listarCatAtual(){
-    this.catalogoService.buscarAtual().then((c)=>{   
-      if(c.length>0){   
+  listarCatAtual() {
+    this.catalogoService.buscarAtual().then((c) => {
+      if (c.length > 0) {
         this.catalogoAtual = c[0];
-      }else{
+      } else {
         this.catalogoAtual = null;
       }
     });
@@ -92,4 +157,50 @@ export class CadastroPedidosComponent implements OnInit {
       relativeTo: this.activatedRoute,
     });
   }
+
+  atualizarCat() {
+    this.catalogoService
+      .update(this.catalogoAtual._id, this.catalogoAtual)
+      .then(() => {});
+  }
+
+  decrementarProd(p:Produto){
+    if(this.produtos_pedido.length==0){
+      let pd : ProdutoPedido ={
+        _id:'',
+        descricao:'',
+        limite: 0,
+        observacao:'',
+        quantidade:0,
+        unidade_medida:UnidadeMedida[1],
+        valorA:0,
+        valorB:0,
+        valor_total:1
+      }
+
+    }
+    
+  }
+
+  incrementarProd(p:Produto){
+    if(this.produtos_pedido.length==0){
+      
+    }
+  }
+
+  convertToProdutoPedido(p:Produto){
+
+    let pd : ProdutoPedido ={
+      _id:'',
+      descricao:'',
+      limite: 0,
+      observacao:'',
+      quantidade:0,
+      unidade_medida:UnidadeMedida[1],
+      valorA:0,
+      valorB:0,
+      valor_total:1
+    }
+  }
+
 }

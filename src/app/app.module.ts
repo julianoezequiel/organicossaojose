@@ -89,6 +89,8 @@ import { ListaProdutosCatalogoComponent } from './views/cadastros/cadastro-catal
 
 import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
+import { ProdutosService } from './views/cadastros/services/produtos.service';
+import { PedidosService } from './views/cadastros/services/pedidos.service';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -161,6 +163,8 @@ registerLocaleData(localePt, 'pt-BR');
   AuthService,
   AuthGuard,
   CatalogoService,
+  PedidosService,
+  ProdutosService,
   { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
   { provide: LOCALE_ID, useValue: 'pt-BR' }    

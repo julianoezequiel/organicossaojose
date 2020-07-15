@@ -43,6 +43,22 @@
           </mat-form-field>
         </div>    
       </div>
+      <div class="row">
+        <div class="col">
+          <mat-list-item *ngFor="let prod of catalogoAtual?.produtos">    
+            {{ prod.descricao }}
+            <mat-form-field style="float: right;max-width: 130px;">
+              <button mat-icon-button matSuffix  color="accent">
+                <mat-icon (click)="incrementarProd(prod)">add_circle</mat-icon>
+              </button>           
+              <input matInput [type]="text">   
+               <button mat-icon-button matPrefix  color="accent">
+                <mat-icon (click)="decrementarProd(prod)">remove_circle</mat-icon>
+              </button>            
+            </mat-form-field>              
+          </mat-list-item>
+        </div>
+      </div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" type="submit">Salvar</button>

@@ -6,8 +6,8 @@ import {
   ListaPedidosDataSource,
   ListaPedidosItem,
 } from "./lista-pedidos-datasource";
-import { PedidosService } from "./pedidos.service";
 import { Router, ActivatedRoute } from "@angular/router";
+import { PedidosService } from '../services/pedidos.service';
 
 @Component({
   selector: "lista-pedidos",

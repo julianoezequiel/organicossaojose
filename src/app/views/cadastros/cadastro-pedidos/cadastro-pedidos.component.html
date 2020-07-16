@@ -56,17 +56,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="td-prod" *ngFor="let prod of catalogoAtual?.produtos">
-                  <td class="td-prod" style="width:70%">{{ prod.descricao }} </td>
+                <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos">
+                  <td class="td-prod" style="width:60%">{{ prod.descricao }} </td>
                   <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td>
-                  <td class="td-prod">                
-                    <button class="td-prod"  mat-icon-button>
-                      <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
-                    </button>
-                    <p class="qtd"> {{prod.quantidade || 0}} </p>
-                    <button class="td-prod" mat-icon-button>
-                      <mat-icon (click)="decrementarProd(prod)" class="icon-display">remove</mat-icon>
-                    </button>
+                  <td class="td-prod" style="width:200px">   
+                    <span style="width:400px">
+                      <button class="td-prod"  mat-icon-button>
+                        <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
+                      </button>
+                      <p class="qtd"> {{prod.quantidade || 0}} </p>
+                      <button class="td-prod" mat-icon-button>
+                        <mat-icon (click)="decrementarProd(prod)" class="icon-display">remove</mat-icon>
+                      </button>
+                    </span>             
                   </td>
                   <td class="td-prod">{{(prod?.valor_total != null) ? (prod.valor_total | currency:'BRL':true) : (0 | currency:'BRL':true)}}</td>
                 </tr>

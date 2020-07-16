@@ -8,4 +8,6 @@ export interface Produto{
     valorA:number;
     valorB:number;
     limite:number;
+    quantidade:number;
+    valor_total:number;
 }

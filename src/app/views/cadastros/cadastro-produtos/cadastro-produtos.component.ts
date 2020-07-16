@@ -27,6 +27,8 @@ export class CadastroProdutosComponent implements OnInit {
     valorA: 0,
     valorB: 0,
     limite: 0,
+    quantidade:0,
+    valor_total:0
   };
 
   constructor(
@@ -130,6 +132,8 @@ export class CadastroProdutosComponent implements OnInit {
       limite: controls.limite.value,
       observacao: controls.observacao.value,
       unidade_medida: this.medidas[controls.unidade_medida.value -1],
+      quantidade:0,
+      valor_total:0
     };
 
     return produto;

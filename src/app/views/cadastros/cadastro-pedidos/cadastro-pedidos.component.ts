@@ -11,10 +11,9 @@ import { DiaSemana } from "../model/dia-semana.enum";
 import { FormasPagamentos } from "../model/formas-pagamento.enum";
 import { Status } from "../model/status.enum";
 import { Catalogo } from "../model/catalogo.model";
-import { PedidosService } from '../services/pedidos.service';
-import { Produto } from '../model/produto.model';
-import { ProdutoPedido } from '../model/produto-pedido.model';
-import { UnidadeMedida } from '../model/unidade-medida';
+import { PedidosService } from "../services/pedidos.service";
+import { Produto } from "../model/produto.model";
+import { UnidadeMedida, unidades } from "../model/unidade-medida";
 
 @Component({
   selector: "cadastro-pedidos",
@@ -27,8 +26,7 @@ export class CadastroPedidosComponent implements OnInit {
   forma_pagamento: FormasPagamentos[] = [];
   pedidoForm: FormGroup;
   dia_semana: DiaSemana[] = [];
-  produtos_disponoveis:Produto[]=[];
-  produtos_pedido:ProdutoPedido[]=[];
+  produtos_disponoveis: Produto[] = [];
 
   pedido: Pedido = {
     _id: "",
@@ -52,10 +50,9 @@ export class CadastroPedidosComponent implements OnInit {
     private toastr: ToastrService,
     private catalogoService: CatalogoService,
     private activatedRoute: ActivatedRoute,
-    private pedidosService:PedidosService
+    private pedidosService: PedidosService
   ) {}
 
-  
   ngOnInit() {
     this.dia_semana.push(DiaSemana.QUINTA);
     this.dia_semana.push(DiaSemana.SEXTA);
@@ -70,7 +67,7 @@ export class CadastroPedidosComponent implements OnInit {
 
   onSubmit() {
     const controls = this.pedidoForm.controls;
-    let existeAtual :boolean = false;
+    let existeAtual: boolean = false;
     /** check form */
     if (this.pedidoForm.invalid) {
       Object.keys(controls).forEach((controlName) =>
@@ -79,7 +76,6 @@ export class CadastroPedidosComponent implements OnInit {
       return;
     }
 
-    
     const prod: Pedido = this.preparePedido();
 
     if (prod._id) {
@@ -91,7 +87,7 @@ export class CadastroPedidosComponent implements OnInit {
   }
 
   addPedido(p: Pedido) {
-    this.pedidosService.create(p).then(()=>{
+    this.pedidosService.create(p).then(() => {
       this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
         closeButton: true,
         progressAnimation: "decreasing",
@@ -101,29 +97,29 @@ export class CadastroPedidosComponent implements OnInit {
     });
   }
   updatePedido(p: Pedido) {
-    this.pedidosService.update(p._id,p).then(()=>{
+    this.pedidosService.update(p._id, p).then(() => {
       this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
         closeButton: true,
         progressAnimation: "decreasing",
         progressBar: true,
       });
       this.router.navigate(["../"], {});
-    });    
+    });
   }
   preparePedido(): Pedido {
     const controls = this.pedidoForm.controls;
 
-    const p : Pedido ={
-      _id:controls._id.value,
-      data:controls.data.value,
-      dia_entrega:controls.dia_entrega.value,
-      forma_pagamento:controls.forma_pagamento.value,
-      numero_celular:controls.numero_celular.value,
-      pago:controls.pago.value,
-      produto_pedido:this.produtos_pedido,
-      status:controls.status.value,
-      total_pedido:controls.total_pedido.value,
-    }
+    const p: Pedido = {
+      _id: controls._id.value,
+      data: controls.data.value,
+      dia_entrega: controls.dia_entrega.value,
+      forma_pagamento: controls.forma_pagamento.value,
+      numero_celular: controls.numero_celular.value,
+      pago: controls.pago.value,
+      produto_pedido: [],
+      status: controls.status.value,
+      total_pedido: controls.total_pedido.value,
+    };
 
     return p;
   }
@@ -164,43 +160,51 @@ export class CadastroPedidosComponent implements OnInit {
       .then(() => {});
   }
 
-  decrementarProd(p:Produto){
-    if(this.produtos_pedido.length==0){
-      let pd : ProdutoPedido ={
-        _id:'',
-        descricao:'',
-        limite: 0,
-        observacao:'',
-        quantidade:0,
-        unidade_medida:UnidadeMedida[1],
-        valorA:0,
-        valorB:0,
-        valor_total:1
-      }
-
+  decrementarProd(p: Produto) {
+    if (p.quantidade && p.quantidade > 0) {
+      p.quantidade--;
+    } else {
+      p.quantidade = 0;
     }
-    
+    this.calculaValor(p);
   }
 
-  incrementarProd(p:Produto){
-    if(this.produtos_pedido.length==0){
-      
+  incrementarProd(p: Produto) {
+    if (p.quantidade) {
+      p.quantidade++;
+    } else {
+      p.quantidade = 0;
+      p.quantidade++;
+    }
+    this.calculaValor(p);
+  }
+
+  calculaValor(p: Produto) {
+    if (p.limite > 0 && p.quantidade >= p.limite) {
+      p.valor_total = p.valorB * p.quantidade;
+    } else {
+      p.valor_total = p.valorA * p.quantidade;
     }
   }
 
-  convertToProdutoPedido(p:Produto){
-
-    let pd : ProdutoPedido ={
-      _id:'',
-      descricao:'',
+  convertToProdutoPedido(p: Produto) {
+    let pd: Produto = {
+      _id: "",
+      descricao: "",
       limite: 0,
-      observacao:'',
-      quantidade:0,
-      unidade_medida:UnidadeMedida[1],
-      valorA:0,
-      valorB:0,
-      valor_total:1
-    }
+      observacao: "",
+      quantidade: 0,
+      unidade_medida: p.unidade_medida,
+      valorA: 0,
+      valorB: 0,
+      valor_total: 1,
+    };
   }
 
+  tipoUnidademedida(p: Produto) {
+    if (p.limite > 0 && p.quantidade >= p.limite && p.unidade_medida.id == 1) {
+      p.unidade_medida = unidades[2];
+    }
+    return p.unidade_medida.descricao;
+  }
 }

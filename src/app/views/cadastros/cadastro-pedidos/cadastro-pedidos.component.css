@@ -1,4 +1,4 @@
-.full-width {
+/* .full-width {
   width: 100%;
 }
 
@@ -20,8 +20,29 @@
 .col {
   flex: 1;
   margin-right: 20px;
+} */
+
+/* .col:last-child {
+  margin-right: 0;
+} */
+
+.icon-display {
+  transform: scale(.8);
+  cursor: pointer;
 }
 
-.col:last-child {
-  margin-right: 0;
+.qtd{
+  position: relative;
+  text-align: center;
+  /* height: 10px; */
+  display: inline-block;
+  /* vertical-align: middle; */
+  min-width: 20px;
+  
+}
+
+.td-prod{
+  vertical-align: middle;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }

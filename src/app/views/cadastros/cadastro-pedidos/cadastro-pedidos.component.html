@@ -45,18 +45,34 @@
       </div>
       <div class="row">
         <div class="col">
-          <mat-list-item *ngFor="let prod of catalogoAtual?.produtos">    
-            {{ prod.descricao }}
-            <mat-form-field style="float: right;max-width: 130px;">
-              <button mat-icon-button matSuffix  color="accent">
-                <mat-icon (click)="incrementarProd(prod)">add_circle</mat-icon>
-              </button>           
-              <input matInput [type]="text">   
-               <button mat-icon-button matPrefix  color="accent">
-                <mat-icon (click)="decrementarProd(prod)">remove_circle</mat-icon>
-              </button>            
-            </mat-form-field>              
-          </mat-list-item>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Preço</th>
+                  <th>qtd</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="td-prod" *ngFor="let prod of catalogoAtual?.produtos">
+                  <td class="td-prod" style="width:70%">{{ prod.descricao }} </td>
+                  <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td>
+                  <td class="td-prod">                
+                    <button class="td-prod"  mat-icon-button>
+                      <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
+                    </button>
+                    <p class="qtd"> {{prod.quantidade || 0}} </p>
+                    <button class="td-prod" mat-icon-button>
+                      <mat-icon (click)="decrementarProd(prod)" class="icon-display">remove</mat-icon>
+                    </button>
+                  </td>
+                  <td class="td-prod">{{(prod?.valor_total != null) ? (prod.valor_total | currency:'BRL':true) : (0 | currency:'BRL':true)}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>         
         </div>
       </div>
     </mat-card-content>

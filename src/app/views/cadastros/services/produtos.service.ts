@@ -48,7 +48,9 @@ export class ProdutosService {
            observacao: e.payload.doc.data()["observacao"],
            unidade_medida:e.payload.doc.data()["unidade_medida"],
            valorA:e.payload.doc.data()["valorA"],
-           valorB:e.payload.doc.data()["valorB"]
+           valorB:e.payload.doc.data()["valorB"],
+           quantidade:0,
+           valor_total:0
          }
        })
        acept(lista);

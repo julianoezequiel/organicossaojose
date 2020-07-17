@@ -14,3 +14,12 @@
 table {
   width: 100%;
 }
+
+.carregando{
+  height: 20px;
+}
+
+.semconteudo{
+  /* height: 20px !important; */
+  width: 100%;
+}

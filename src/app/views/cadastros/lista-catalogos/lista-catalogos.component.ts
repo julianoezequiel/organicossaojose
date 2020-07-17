@@ -23,7 +23,7 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource: MatTableDataSource<Catalogo>;
-  displayedColumns = ["data","qtd", "acoes"];
+  displayedColumns = ["data","qtd","atual", "acoes"];
   datePipe: DatePipe; 
   formato: string;
 
@@ -47,8 +47,6 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
   adicionar() {

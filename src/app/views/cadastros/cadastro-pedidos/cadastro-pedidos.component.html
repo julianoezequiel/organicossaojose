@@ -1,7 +1,7 @@
 <form [formGroup]="pedidoForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="shipping-card">
     <mat-card-header>
-        <mat-card-title>Título</mat-card-title>       
+        <mat-card-title>Pedido Pendente</mat-card-title>       
         <!-- <mat-card-title>Cadastrar Pedido</mat-card-title>        -->
     </mat-card-header>
     
@@ -61,7 +61,7 @@
               </thead>
               <tbody>
                 <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos">
-                  <td class="td-prod" style="width:60%">{{ prod.descricao }} </td>
+                  <td class="td-prod-descr" style="width:50%">{{ prod.descricao }} </td>
                   <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td>
                   <td class="td-prod" style="width:200px">   
                     <span style="width:400px">

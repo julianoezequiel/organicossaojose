@@ -110,7 +110,7 @@ export class CatalogoComponent implements OnInit {
   }
 
   voltar() {
-    this.router.navigate(["../"], {});
+    this.router.navigate(["lista-de-catalogo"], {});
   }
 
   async onSubmit() {

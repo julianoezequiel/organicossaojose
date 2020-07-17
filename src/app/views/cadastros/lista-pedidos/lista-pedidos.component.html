@@ -1,23 +1,49 @@
 <mat-card>
-  <mat-card-subtitle>
-    Simple card 
-    <button id="add-button"  mat-raised-button color="primary" (click)="adicionar()">
-      Adicionar
-    </button>
-  </mat-card-subtitle>
+
+    <mat-card-header>
+        <mat-card-title>Pedidos Pendentes 
+        </mat-card-title>   
+       
+      </mat-card-header>
+
   
   <div class="mat-elevation-z8">
-    <div class="row">
-      <table mat-table class="full-width-table" matSort aria-label="Elements"  [dataSource]="dataSource">
+      
+      <div class="row">
+          <div class="col" style="margin: 15px 15px 15px 15px;">           
+                <button  style="float: left;margin: 15px;" mat-raised-button color="primary" 
+      type="button" (click)="adicionar()">Adicionar Pedido</button>
+          </div>
+          <div class="col" style="margin: 15px 15px 15px 15px;">
+            <mat-form-field class="input-full-width"  style="width: 100%;">
+              <mat-label>Buscar</mat-label>
+              <mat-icon matPrefix>search</mat-icon>
+              <input matInput (keyup)="applyFilter($event.target.value)" type="search" placeholder="Buscar">
+            </mat-form-field>
+         </div>
+        </div>
+
+    <mat-card class="carregando" *ngIf="carregando">
+        <mat-card-subtitle>
+          Carregando
+        </mat-card-subtitle>
+      </mat-card>
+      <mat-card class="semconteudo" *ngIf="semconteudo"> 
+        <mat-card-subtitle> Sem pedido pendentes</mat-card-subtitle>
+      </mat-card>
+    <div class="" *ngIf="!semconteudo">
+      <table  mat-table class="full-width-table" matSort aria-label="Elements"  [dataSource]="dataSource">
+     
+       
         <!-- Id Column -->
         <ng-container matColumnDef="celular">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Número</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Número Celular</th>
           <td mat-cell *matCellDef="let row">{{row.numero_celular}}</td>
         </ng-container>
     
         <!-- Name Column -->
         <ng-container matColumnDef="catalogo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Catálogo</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Data do Catálogo</th>
           <td mat-cell *matCellDef="let row">{{row?.catalogo?.data_entrega.toDate() | date: 'dd/MM/yyyy'}}</td>
         </ng-container>    
         

@@ -65,7 +65,7 @@ export const routes: Routes = [
         path: 'cadastro-pedidos',
         component: CadastroPedidosComponent,
         data: {
-          title: 'Novo Pedido'
+          title: 'Pedido '
         }
       },
       {

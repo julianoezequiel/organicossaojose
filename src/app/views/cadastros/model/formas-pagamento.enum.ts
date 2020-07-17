@@ -1,6 +1,6 @@
 export enum FormasPagamentos{
-    DINHEIRO,
-    DEBITO,
-    TRANFERENCIA,
-    BOLETO
+    DINHEIRO = 'Dinheiro',
+    DEBITO = 'Débito',
+    TRANFERENCIA = 'Transferência Bancária',
+    BOLETO = 'Boleto'
 }

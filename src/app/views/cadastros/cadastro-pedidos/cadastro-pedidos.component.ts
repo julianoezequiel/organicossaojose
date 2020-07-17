@@ -56,7 +56,7 @@ export class CadastroPedidosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.dia_semana.push(DiaSemana.QUINTA);
+    // this.dia_semana.push(DiaSemana.QUINTA);
     this.dia_semana.push(DiaSemana.SEXTA);
     this.dia_semana.push(DiaSemana.SABADO);
     this.forma_pagamento.push(FormasPagamentos.BOLETO);
@@ -75,7 +75,7 @@ export class CadastroPedidosComponent implements OnInit {
 						.read(id)
             .valueChanges();            
 					material.subscribe((value) => {
-            this.pedido._id = value._id;
+            this.pedido._id = id;
             this.pedido.data = value.data;
             this.pedido.dia_entrega = value.dia_entrega;
             this.pedido.forma_pagamento =value.forma_pagamento;
@@ -85,7 +85,9 @@ export class CadastroPedidosComponent implements OnInit {
             this.pedido.status = value.status;
             this.pedido.total_pedido = value.total_pedido;
             this.pedido.catalogo =  value.catalogo;
-
+            this.catalogoAtual = value.catalogo;
+            this.catalogoAtual.produtos = this.pedido.produto_pedido;
+            this.calculaTotal();
             this.createForm();
 					});						
 				} else{
@@ -94,6 +96,17 @@ export class CadastroPedidosComponent implements OnInit {
 			}
 		);
 		this.subscriptions.push(routeSubscription);
+  }
+
+  listarCatAtual() {
+    
+    this.catalogoService.buscarAtual().then((c) => {
+      if (c.length > 0) {
+        this.catalogoAtual = c[0];
+      } else {
+       this.router.navigate(["error"]);
+      }
+    });
   }
 
   onSubmit() {
@@ -124,7 +137,7 @@ export class CadastroPedidosComponent implements OnInit {
         progressAnimation: "decreasing",
         progressBar: true,
       });
-      this.router.navigate(["../"], {});
+      this.router.navigate(["lista-de-pedidos"], {});
     });
   }
   updatePedido(p: Pedido) {
@@ -134,7 +147,7 @@ export class CadastroPedidosComponent implements OnInit {
         progressAnimation: "decreasing",
         progressBar: true,
       });
-      this.router.navigate(["../"], {});
+      this.router.navigate(["lista-de-pedidos"], {});
     });
   }
   preparePedido(): Pedido {
@@ -179,20 +192,10 @@ export class CadastroPedidosComponent implements OnInit {
     });
   }
 
-  listarCatAtual() {
-    this.catalogoService.buscarAtual().then((c) => {
-      if (c.length > 0) {
-        this.catalogoAtual = c[0];
-      } else {
-        this.catalogoAtual = null;
-      }
-    });
-  }
+
 
   voltar() {
-    this.router.navigate(["../", ""], {
-      relativeTo: this.activatedRoute,
-    });
+    this.router.navigate(["lista-de-pedidos"]);
   }
 
   atualizarCat() {

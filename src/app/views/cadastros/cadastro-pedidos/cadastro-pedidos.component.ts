@@ -27,7 +27,7 @@ export class CadastroPedidosComponent implements OnInit {
   pedidoForm: FormGroup;
   dia_semana: DiaSemana[] = [];
   produtos_disponoveis: Produto[] = [];
-
+  total :number = 0;
   pedido: Pedido = {
     _id: "",
     data: new Date(),
@@ -38,9 +38,11 @@ export class CadastroPedidosComponent implements OnInit {
     produto_pedido: [],
     status: Status.EM_ANDAMENTO,
     total_pedido: 0,
+    catalogo:null,
   };
 
   catalogoAtual: Catalogo;
+  
 
   constructor(
     private fb: FormBuilder,
@@ -62,7 +64,36 @@ export class CadastroPedidosComponent implements OnInit {
     this.forma_pagamento.push(FormasPagamentos.DINHEIRO);
     this.forma_pagamento.push(FormasPagamentos.TRANFERENCIA);
     this.createForm();
-    this.listarCatAtual();
+    
+
+    this.createForm();
+    const routeSubscription = this.activatedRoute.params.subscribe(
+			(params) => {
+				const id = params.id;
+				if (id && id.length > 0) {
+					const material = this.pedidosService
+						.read(id)
+            .valueChanges();            
+					material.subscribe((value) => {
+            this.pedido._id = value._id;
+            this.pedido.data = value.data;
+            this.pedido.dia_entrega = value.dia_entrega;
+            this.pedido.forma_pagamento =value.forma_pagamento;
+            this.pedido.numero_celular = value.numero_celular;
+            this.pedido.pago = value.pago;
+            this.pedido.produto_pedido = value.produto_pedido;
+            this.pedido.status = value.status;
+            this.pedido.total_pedido = value.total_pedido;
+            this.pedido.catalogo =  value.catalogo;
+
+            this.createForm();
+					});						
+				} else{
+          this.listarCatAtual();
+        }
+			}
+		);
+		this.subscriptions.push(routeSubscription);
   }
 
   onSubmit() {
@@ -119,7 +150,17 @@ export class CadastroPedidosComponent implements OnInit {
       produto_pedido: [],
       status: controls.status.value,
       total_pedido: controls.total_pedido.value,
+      catalogo:this.catalogoAtual,
     };
+
+    p.produto_pedido = this.catalogoAtual.produtos.filter((p:Produto)=>{
+      return p.quantidade > 0;
+    });
+    
+    p.total_pedido = this.total;
+
+    delete this.catalogoAtual.produtos;
+    delete this.catalogoAtual.pedidos;
 
     return p;
   }
@@ -185,6 +226,7 @@ export class CadastroPedidosComponent implements OnInit {
     } else {
       p.valor_total = p.valorA * p.quantidade;
     }
+    this.calculaTotal();
   }
 
   convertToProdutoPedido(p: Produto) {
@@ -206,5 +248,14 @@ export class CadastroPedidosComponent implements OnInit {
       p.unidade_medida = unidades[2];
     }
     return p.unidade_medida.descricao;
+  }
+
+  calculaTotal(){
+    this.total = 0;
+    this.catalogoAtual.produtos.forEach((p:Produto)=>{
+      if(p.valor_total){
+        this.total = this.total + p.valor_total;
+      }
+    });
   }
 }

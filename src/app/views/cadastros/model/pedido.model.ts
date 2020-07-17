@@ -2,6 +2,7 @@ import { FormasPagamentos } from './formas-pagamento.enum';
 import { DiaSemana } from './dia-semana.enum';
 import { Status } from './status.enum';
 import { Produto } from './produto.model';
+import { Catalogo } from './catalogo.model';
 
 export class Pedido {
     data:Date;
@@ -13,4 +14,5 @@ export class Pedido {
     forma_pagamento:FormasPagamentos;
     dia_entrega:DiaSemana;
     pago:boolean;
+    catalogo:Catalogo;
 }

@@ -53,7 +53,8 @@ export class PedidosService {
             pago: e.payload.doc.data()["pago"],
             produto_pedido: e.payload.doc.data()["produto_pedido"],
             status: e.payload.doc.data()["status"],
-            total_pedido: e.payload.doc.data()["total_pedido"],
+            total_pedido: e.payload.doc.data()["total_pedido"],            
+            catalogo:e.payload.doc.data()["catalogo"],
           };
         });
         acept(lista);

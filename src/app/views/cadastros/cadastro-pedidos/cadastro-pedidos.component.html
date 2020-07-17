@@ -16,10 +16,9 @@
             </mat-error>
           </mat-form-field>          
         </div>       
-      </div>
-      <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
+            <mat-label>Dia de entrega</mat-label>
             <mat-select placeholder="Selecione o dia para entrega" formControlName="dia_entrega">
               <mat-option *ngFor="let dia of dia_semana" [value]="dia">
                 {{ dia }}
@@ -32,6 +31,7 @@
         </div>  
         <div class="col">
           <mat-form-field class="full-width">
+            <mat-label>Forma de pagamento</mat-label>
             <mat-select placeholder="Unidade Medida" formControlName="forma_pagamento">
               <mat-option *ngFor="let state of forma_pagamento" [value]="state">
                 {{ state }}
@@ -41,8 +41,12 @@
               Unidade de medida é <strong>obrigatória</strong>
             </mat-error>
           </mat-form-field>
-        </div>    
-      </div>
+        </div>  
+
+        <div class="col">
+          Total Pedido: {{total | currency:'BRL':true }}
+        </div>
+      </div> 
       <div class="row">
         <div class="col">
           <div class="table-responsive">
@@ -61,11 +65,11 @@
                   <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td>
                   <td class="td-prod" style="width:200px">   
                     <span style="width:400px">
-                      <button class="td-prod"  mat-icon-button>
+                      <button class="td-prod"  type="button" mat-icon-button>
                         <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
                       </button>
                       <p class="qtd"> {{prod.quantidade || 0}} </p>
-                      <button class="td-prod" mat-icon-button>
+                      <button class="td-prod" type="button" mat-icon-button>
                         <mat-icon (click)="decrementarProd(prod)" class="icon-display">remove</mat-icon>
                       </button>
                     </span>             

@@ -10,3 +10,7 @@
   left: auto;
   position: relative;
 }
+
+table {
+  width: 100%;
+}

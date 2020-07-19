@@ -23,7 +23,7 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource: MatTableDataSource<Catalogo>;
-  displayedColumns = ["data","qtd","atual", "acoes"];
+  displayedColumns = ["data_entrega","produtos","atual", "acoes"];
   datePipe: DatePipe; 
   formato: string;
 
@@ -43,6 +43,19 @@ export class ListaCatalogosComponent implements AfterViewInit, OnInit {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+
+      
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        console.log(item)
+        switch (property) {
+          case 'data_entrega': {
+            let d : firebase.firestore.Timestamp;
+            d  = item.data_entrega as unknown as firebase.firestore.Timestamp;
+            return new Date(d.toDate());
+          }
+          default: return item[property];
+        }
+      };
     });
   }
 

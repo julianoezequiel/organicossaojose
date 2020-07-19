@@ -49,13 +49,24 @@
       </div> 
       <div class="row">
         <div class="col">
+          <section class="example-section">
+            <label class="example-margin">Pago: </label>
+            <mat-radio-group formControlName="pago">
+              <mat-radio-button class="example-margin" [checked]="pedido.pago" value="true">Sim</mat-radio-button>
+              <mat-radio-button class="example-margin" [checked]="!pedido.pago" value="false">Não</mat-radio-button>
+            </mat-radio-group>
+          </section>
+       </div>    
+      </div>
+      <div class="row">
+        <div class="col">
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <thead>
                 <tr>
                   <th>Produto</th>
                   <th>Preço</th>
-                  <th>qtd</th>
+                  <th class="td-prod-btn">qtd</th>
                   <th>Total</th>
                 </tr>
               </thead>
@@ -63,7 +74,7 @@
                 <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos">
                   <td class="td-prod-descr" style="width:50%">{{ prod.descricao }} </td>
                   <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td>
-                  <td class="td-prod" style="width:200px">   
+                  <td class="td-prod-btn" style="width:200px">   
                     <span style="width:400px">
                       <button class="td-prod"  type="button" mat-icon-button>
                         <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>

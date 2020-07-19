@@ -6,7 +6,6 @@ import {
 } from "@angular/material/dialog";
 import { Produto } from "../../model/produto.model";
 import { ProdutosService } from "../../services/produtos.service";
-import { promises } from 'fs';
 
 @Component({
   selector: "app-lista-produtos-catalogo",

@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTable, MatTableDataSource } from "@angular/material/table";
-import { ListaProdutosDataSource } from "./lista-produtos-datasource";
+import { MatSort, MatSortable } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 import { Produto } from "../model/produto.model";
 import { ProdutosService } from "../services/produtos.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -21,11 +20,10 @@ import { ToastrService } from "ngx-toastr";
 export class ListaProdutosComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  // @ViewChild(MatTable) table: MatTable<Produto>;
-
   dataSource: MatTableDataSource<Produto>;
-
   data :Produto[];
+
+  order:boolean = false;
 
   constructor(
     public produtosService: ProdutosService,
@@ -35,7 +33,7 @@ export class ListaProdutosComponent implements AfterViewInit, OnInit {
     private toastr: ToastrService
   ) {}
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ["descricao", "valor", "unidade", "acoes"];
+  displayedColumns = ["descricao", "valorA", "unidade", "acoes"];
 
   async ngOnInit() {       
     await this.produtosService.listar().then((data)=>{
@@ -48,6 +46,14 @@ export class ListaProdutosComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {        
     
+  }
+
+  sortDataSource(id: string, start: boolean){
+    let ord = 'desc';
+    if(this.order){
+      ord = 'asc'
+    }
+    this.dataSource.sort.sort(<MatSortable>({id: id, start: ord}));
   }
 
   adicionar() {

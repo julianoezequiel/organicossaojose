@@ -26,9 +26,9 @@
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="valor">
+      <ng-container matColumnDef="valorA">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
-        <td mat-cell *matCellDef="let row">{{ row.valorA }}</td>
+        <td mat-cell *matCellDef="let row">{{ row.valorA | currency:'BRL':true  }}</td>
       </ng-container>
 
       <ng-container matColumnDef="unidade">

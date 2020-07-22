@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 		this.router.navigate(["dashboard"]);
       })
       .catch(() => {
-		this.toastr.warning('Usuário ou senha inválidos','Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
+	  	this.toastr.warning('Usuário ou senha inválidos','Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
       })
       .finally(() => {
         this.loading = false;

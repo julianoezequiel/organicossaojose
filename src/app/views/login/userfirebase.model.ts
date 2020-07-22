@@ -4,4 +4,6 @@ export interface UserFirebase {
     displayName: string;
     photoURL: string;
     emailVerified: boolean;
+    password:string;
+    password2:string
  }

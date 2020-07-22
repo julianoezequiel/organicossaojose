@@ -11,6 +11,7 @@ import {
 } from "@angular/fire/firestore";
 import { environment } from "../../../environments/environment";
 import { UserFirebase } from "./userfirebase.model";
+import { rejects } from "assert";
 
 @Injectable()
 export class AuthService {
@@ -57,8 +58,8 @@ export class AuthService {
 
   // Sign in with email/password
   SignIn(email, password) {
-    return new Promise((resolve,reject)=>{
-       this.afAuth
+    return new Promise((resolve, reject) => {
+      this.afAuth
         .signInWithEmailAndPassword(email, password)
         .then((result) => {
           this.SetUserData(result.user);
@@ -72,40 +73,46 @@ export class AuthService {
   }
 
   // Sign up with email/password
-  SignUp(email, password) {
-    return this.afAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        /* Call the SendVerificaitonMail() function when new user sign 
-			up and returns promise */
-        this.SendVerificationMail();
-        this.SetUserData(result.user);
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
+  async SignUp(email, password) {
+    return new Promise((resolve, reject) => {
+      this.afAuth
+        .createUserWithEmailAndPassword(email, password)
+        .then((result) => {
+          this.SendVerificationMail().then(() => {
+            this.SetUserData(result.user).then(() => {
+              resolve(result);
+            });
+          });
+        })
+        .catch((error) => {
+         reject(error);
+        });
+    });
   }
 
   // Send email verfificaiton when new user sign up
   SendVerificationMail() {
     return this.afAuth.currentUser.then((u) => {
       u.sendEmailVerification();
-      this.router.navigate(["verify-email-address"]);
+      // this.router.navigate(["verify-email-address"]);
     });
   }
 
   // Reset Forggot password
   ForgotPassword(passwordResetEmail) {
-    return this.afAuth
+    return new Promise((acept,reject)=>{
+      this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
-      .then(() => {
-        window.alert("Password reset email sent, check your inbox.");
+      .then((success) => {
+        acept(success);
       })
       .catch((error) => {
-        window.alert(error);
+       reject(error);
       });
+    })
   }
 
+ 
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -147,6 +154,8 @@ export class AuthService {
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
+      password:'',
+      password2:''
     };
 
     localStorage.setItem("user", JSON.stringify(userData));
@@ -154,7 +163,6 @@ export class AuthService {
     return userRef.set(userData, {
       merge: true,
     });
-
   }
 
   // Sign out

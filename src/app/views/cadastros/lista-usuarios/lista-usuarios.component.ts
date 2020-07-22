@@ -1,8 +1,16 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ListaUsuariosDataSource, ListaUsuariosItem } from './lista-usuarios-datasource';
+import { UserFirebase } from '../../login/userfirebase.model';
+import { MatDialog } from '@angular/material/dialog';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { UsuarioService } from '../services/usuario.service';
+import { AuthService } from '../../login/auth.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'lista-usuarios',
@@ -10,21 +18,88 @@ import { ListaUsuariosDataSource, ListaUsuariosItem } from './lista-usuarios-dat
   styleUrls: ['./lista-usuarios.component.css']
 })
 export class ListaUsuariosComponent implements AfterViewInit, OnInit {
+
+  constructor( public dialog: MatDialog,
+    private router: Router,
+    private fb: FormBuilder,
+    private toastr: ToastrService,
+    private usuarioService: UsuarioService,
+    private activatedRoute: ActivatedRoute,
+    public auth: AuthService){}
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<ListaUsuariosItem>;
-  dataSource: ListaUsuariosDataSource;
+  
+  dataSource: MatTableDataSource<UserFirebase>;
+
+  data :UserFirebase[];
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'name'];
 
-  ngOnInit() {
-    this.dataSource = new ListaUsuariosDataSource();
+  async ngOnInit() {
+    await this.usuarioService.listar().then((data)=>{
+      this.data = data;      
+      this.dataSource = new MatTableDataSource(this.data);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
+   
+  }
+
+  adicionar() {
+    this.router.navigate(["../cadastro-produtos"], {
+      relativeTo: this.activatedRoute,
+    });
+  }
+
+  editar(id) {
+    this.router.navigate(["../cadastro-produtos", id], {
+      relativeTo: this.activatedRoute,
+    });
+  }
+
+  confirmDialog(m): void {
+    const message = `Deseja excluir o produto?`;
+
+    const dialogData = new ConfirmDialogModel("Confirmar", message);
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult == true) {
+        this.excluir(m);
+      }
+    });
+  }
+
+  excluir(m: UserFirebase) {
+    if (m.uid) {
+      this.usuarioService.delete(m.uid).then(() => {
+        this.toastr.success("Produto excluído com sucesso", "Atenção!", {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+        this.usuarioService.listar().then((data)=>{
+          this.data = data;      
+          this.dataSource = new MatTableDataSource(this.data);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+      });
+    }
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 }

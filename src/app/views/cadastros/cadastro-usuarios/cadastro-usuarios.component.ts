@@ -62,13 +62,13 @@ export class CadastroUsuariosComponent implements OnInit {
   createForm() {
     this.userForm = this.fb.group({
       usuario: [this.userData.displayName, Validators.required],
-      email: [this.userData.email, Validators.required, Validators.email],
-      senha: [this.userData.password, Validators.required, Validators.min(6)],
+      email: [this.userData.email, [Validators.required, Validators.email]],
+      senha: [this.userData.password, [Validators.required, Validators.minLength(6)]],
       senha_confirma: [
-        this.userData.password2,
+        this.userData.password2,[
         Validators.required,
-        Validators.min(6),
-      ],
+        Validators.minLength(6),
+      ]],
     });
   }
 
@@ -93,8 +93,10 @@ export class CadastroUsuariosComponent implements OnInit {
   }
 
   addUser(userFirebase: UserFirebase) {    
-    this.auth.SignUp(userFirebase.email,userFirebase.password).then((result)=>{
-    this.toastr.success('Usuário cadastrado com sucesso, email de verificação enviado para ' + userFirebase.email,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
+    this.auth.SignUp(userFirebase).then((result)=>{
+      userFirebase.uid = result.uid;
+      this.toastr.success('Usuário cadastrado com sucesso, email de verificação enviado para ' + userFirebase.email,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
+      // this.updateUser(userFirebase);    
    }).catch((error)=>{
     this.toastr.warning(error,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
    })
@@ -129,5 +131,9 @@ export class CadastroUsuariosComponent implements OnInit {
     }
 
     return userFirebase;
+  }
+
+  voltar(){
+    this.router.navigate(["../lista-de-usuario"], {});
   }
 }

@@ -47,7 +47,9 @@ export class UsuarioService {
            email: e.payload.doc.data()["email"],
            displayName: e.payload.doc.data()["displayName"],
            photoURL: e.payload.doc.data()["photoURL"],
-           emailVerified:e.payload.doc.data()["emailVerified"]
+           emailVerified:e.payload.doc.data()["emailVerified"],
+           password:'',
+           password2:''
          }
        })
        acept(lista);

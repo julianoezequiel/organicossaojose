@@ -35,7 +35,7 @@ export class ListaUsuariosComponent implements AfterViewInit, OnInit {
   data :UserFirebase[];
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  displayedColumns = ['displayName','email','acoes'];
 
   async ngOnInit() {
     await this.usuarioService.listar().then((data)=>{
@@ -51,19 +51,19 @@ export class ListaUsuariosComponent implements AfterViewInit, OnInit {
   }
 
   adicionar() {
-    this.router.navigate(["../cadastro-produtos"], {
+    this.router.navigate(["../cadastro-usuario"], {
       relativeTo: this.activatedRoute,
     });
   }
 
   editar(id) {
-    this.router.navigate(["../cadastro-produtos", id], {
+    this.router.navigate(["../cadastro-usuario", id], {
       relativeTo: this.activatedRoute,
     });
   }
 
   confirmDialog(m): void {
-    const message = `Deseja excluir o produto?`;
+    const message = `Deseja excluir o usuário?`;
 
     const dialogData = new ConfirmDialogModel("Confirmar", message);
 
@@ -82,7 +82,7 @@ export class ListaUsuariosComponent implements AfterViewInit, OnInit {
   excluir(m: UserFirebase) {
     if (m.uid) {
       this.usuarioService.delete(m.uid).then(() => {
-        this.toastr.success("Produto excluído com sucesso", "Atenção!", {
+        this.toastr.success("Usuário excluído com sucesso", "Atenção!", {
           closeButton: true,
           progressAnimation: "decreasing",
           progressBar: true,

@@ -5,24 +5,25 @@
       <mat-card-title>Título </mat-card-title>
     </mat-card-header>
     <div class="row">
-      <div class="col">
+      <div class="col-md-5">
         <mat-form-field appearance="fill" >
           <mat-label>Nome de Usuário</mat-label>
           <input matInput  formControlName="usuario">
-          <mat-error *ngIf="catalogoForm.controls['usuario'].hasError('required')">
+          <mat-error *ngIf="userForm.controls['usuario'].hasError('required')">
             Nome usuário é <strong>obrigatório</strong>
           </mat-error>
         </mat-form-field>
       </div>
-
-      <div class="col">
+    </div>
+    <div class="row">
+      <div class="col-6">
         <mat-form-field appearance="fill" >
           <mat-label>E-mail</mat-label>
-          <input matInput formControlName="email">
-          <mat-error *ngIf="catalogoForm.controls['email'].hasError('required')">
+          <input matInput formControlName="email" type="email">
+          <mat-error *ngIf="userForm.controls['email'].hasError('required')">
             E-mail é <strong>obrigatório</strong>
           </mat-error>
-          <mat-error *ngIf="catalogoForm.controls['email'].hasError('email')">
+          <mat-error *ngIf="userForm.controls['email'].hasError('email')">
             E-mail é <strong>inválido</strong>
           </mat-error>
         </mat-form-field>
@@ -34,23 +35,25 @@
         <mat-form-field appearance="fill" >
           <mat-label>Senha</mat-label>
           <input matInput formControlName="senha" type="password">
-          <mat-error *ngIf="catalogoForm.controls['senha'].hasError('required')">
+          <mat-error *ngIf="userForm.controls['senha'].hasError('required')">
             Senha é <strong>obrigatória</strong>
           </mat-error>
-          <mat-error *ngIf="catalogoForm.controls['senha_confirma'].hasError('min')">
-           Tamanho mínimo <strong>6</strong>
+          <mat-error *ngIf="userForm.controls['senha'].hasError('minlength')">
+           Tamanho mínimo  <strong>6 dígitos</strong>
           </mat-error>
         </mat-form-field>
       </div>   
+    </div>
+    <div class="row">
         <div class="col">
           <mat-form-field appearance="fill" >
             <mat-label>Senha</mat-label>
             <input matInput formControlName="senha_confirma"  type="password">
-            <mat-error *ngIf="catalogoForm.controls['senha_confirma'].hasError('required')">
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('required')">
               Senha é <strong>obrigatória</strong>
             </mat-error>
-            <mat-error *ngIf="catalogoForm.controls['senha_confirma'].hasError('min')">
-              Tamanho mínimo <strong>6</strong>
+            <mat-error *ngIf="userForm.controls['senha_confirma'].hasError('minlength')">
+              Tamanho mínimo  <strong>6 dígitos</strong>
             </mat-error>
           </mat-form-field>
       </div>

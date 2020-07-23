@@ -35,7 +35,9 @@ export class AuthService {
         JSON.parse(localStorage.getItem("user"));
       }
     });
+
   }
+
 
   /*
    * Handle Http operation that failed.
@@ -62,7 +64,8 @@ export class AuthService {
       this.afAuth
         .signInWithEmailAndPassword(email, password)
         .then((result) => {
-          this.SetUserData(result.user);
+          // this.SetUserData(result.user);
+          localStorage.setItem("user", JSON.stringify(result.user));
           resolve(result);
         })
         .catch((error) => {
@@ -73,15 +76,23 @@ export class AuthService {
   }
 
   // Sign up with email/password
-  async SignUp(email, password) {
+  async SignUp(userFirebase: UserFirebase) : Promise<UserFirebase>{
     return new Promise((resolve, reject) => {
       this.afAuth
-        .createUserWithEmailAndPassword(email, password)
+        .createUserWithEmailAndPassword(userFirebase.email, userFirebase.password)
         .then((result) => {
           this.SendVerificationMail().then(() => {
-            this.SetUserData(result.user).then(() => {
-              resolve(result);
-            });
+            const userData: UserFirebase = {
+              uid: result.user.uid,
+              email: result.user.email,
+              displayName: userFirebase.displayName,
+              photoURL: result.user.photoURL,
+              emailVerified: result.user.emailVerified,
+              password:'',
+              password2:''
+            };
+            this.SetUserData(userData);
+            resolve(userData);
           });
         })
         .catch((error) => {
@@ -93,7 +104,9 @@ export class AuthService {
   // Send email verfificaiton when new user sign up
   SendVerificationMail() {
     return this.afAuth.currentUser.then((u) => {
-      u.sendEmailVerification();
+      u.sendEmailVerification().then((result)=>{
+        console.log(result);
+      });
       // this.router.navigate(["verify-email-address"]);
     });
   }
@@ -157,8 +170,6 @@ export class AuthService {
       password:'',
       password2:''
     };
-
-    localStorage.setItem("user", JSON.stringify(userData));
 
     return userRef.set(userData, {
       merge: true,

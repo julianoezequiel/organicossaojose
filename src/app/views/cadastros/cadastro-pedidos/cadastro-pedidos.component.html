@@ -65,17 +65,18 @@
               <thead>
                 <tr>
                   <th>Produto</th>
-                  <th>Preço</th>
+                  <!-- <th>Preço</th> -->
                   <th class="td-prod-btn">qtd</th>
                   <th>Total</th>
                 </tr>
               </thead>
               <tbody>
                 <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos">
-                  <td class="td-prod-descr" style="width:50%">{{ prod.descricao }} </td>
-                  <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td>
-                  <td class="td-prod-btn" style="width:200px">   
-                    <span style="width:400px">
+                  <td class="td-prod-descr" style="width:50%">{{ prod.descricao }} <br>
+                    {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }} </td>
+                  <!-- <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td> -->
+                  <td class="td-prod-btn" style="width:115px; display: block;">   
+                    <span >
                       <button class="td-prod"  type="button" mat-icon-button>
                         <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
                       </button>
@@ -85,7 +86,7 @@
                       </button>
                     </span>             
                   </td>
-                  <td class="td-prod">{{(prod?.valor_total != null) ? (prod.valor_total | currency:'BRL':true) : (0 | currency:'BRL':true)}}</td>
+                  <td class="td-prod" style="font-size: 10px;">{{(prod?.valor_total != null) ? (prod.valor_total | currency:'BRL':true) : (0 | currency:'BRL':true)}}</td>
                 </tr>
               </tbody>
             </table>

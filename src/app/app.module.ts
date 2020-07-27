@@ -91,6 +91,7 @@ import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 import { ProdutosService } from './views/cadastros/services/produtos.service';
 import { PedidosService } from './views/cadastros/services/pedidos.service';
+import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-cliente.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -153,7 +154,8 @@ registerLocaleData(localePt, 'pt-BR');
     ConfirmDialogComponent,
     CatalogoComponent,
     ListaProdutosCatalogoComponent,
-    ListaCatalogosComponent
+    ListaCatalogosComponent,
+    PedidoClienteComponent
   ],
   providers: [{
     provide: LocationStrategy,

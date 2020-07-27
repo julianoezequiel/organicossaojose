@@ -17,6 +17,7 @@ import { ListaPedidosComponent } from './views/cadastros/lista-pedidos/lista-ped
 import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-produtos.component';
 import { ListaCatalogosComponent } from './views/cadastros/lista-catalogos/lista-catalogos.component';
 import { CatalogoComponent } from './views/cadastros/cadastro-catalogo/catalogo.component';
+import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-cliente.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,13 @@ export const routes: Routes = [
     redirectTo: 'dashboard',
     pathMatch: 'full',
     canActivate:[AuthGuard]
+  },
+   {
+    path: 'pedido',
+    component: PedidoClienteComponent,
+    data: {
+      title: 'Pedido'
+    }
   },
   {
     path: '404',

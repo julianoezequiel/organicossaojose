@@ -6,3 +6,10 @@
 
 // If you want to add something do it here
 @import "custom";
+
+button:focus,
+button:active:focus,
+button.active:focus {
+  outline: none !important;
+  outline-style: none !important;
+}

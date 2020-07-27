@@ -37,7 +37,7 @@ export const navItems: INavData[] = [
   {
     // name: 'Usuários',
     name: "5",
-    url: "/cadastro-usuario",
+    url: "/pedido",
     icon: "icon-people",
   },
   

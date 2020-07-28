@@ -19,4 +19,6 @@ export interface Catalogo {
   pedidos:Pedido[];
 
   atual:boolean;
+
+  numero_wpp:string;
 }

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -88,7 +88,7 @@ import { CatalogoComponent } from './views/cadastros/cadastro-catalogo/catalogo.
 import { ListaProdutosCatalogoComponent } from './views/cadastros/cadastro-catalogo/lista-produtos-catalogo/lista-produtos-catalogo.component';
 
 import localePt from '@angular/common/locales/pt';
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData ,CurrencyPipe} from '@angular/common';
 import { ProdutosService } from './views/cadastros/services/produtos.service';
 import { PedidosService } from './views/cadastros/services/pedidos.service';
 import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-cliente.component';
@@ -132,7 +132,8 @@ registerLocaleData(localePt, 'pt-BR');
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    
   ],
   declarations: [
     AppComponent,
@@ -169,7 +170,9 @@ registerLocaleData(localePt, 'pt-BR');
   ProdutosService,
   { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
-  { provide: LOCALE_ID, useValue: 'pt-BR' }    
+  { provide: LOCALE_ID, useValue: 'pt-BR' }  ,
+  {provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL'},
+  CurrencyPipe  
 
   
 ],

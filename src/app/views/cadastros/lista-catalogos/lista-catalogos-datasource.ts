@@ -29,6 +29,7 @@ export class ListaCatalogoDataSource extends DataSource<Catalogo> {
             hora_inicio_entrega: e.payload.doc.data()["hora_inicio_entrega"],
             atual:e.payload.doc.data()["atual"],
             pedidos:e.payload.doc.data()["pedidos"],
+            numero_wpp:''
         }
       })
       acept(this.data);

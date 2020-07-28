@@ -47,7 +47,8 @@ export class CatalogoComponent implements OnInit {
       hora_confirmar: "14h",
       hora_inicio_entrega: "14h",
       pedidos:[],
-      atual:false
+      atual:false,
+      numero_wpp:'04197414574'
     };
 
     this.createForm();
@@ -67,6 +68,7 @@ export class CatalogoComponent implements OnInit {
             this.catalogo.data_entrega = new Date(value.data_entrega.seconds  * 1000);
             this.catalogo._id = id;
             this.catalogo.atual = value.atual;
+            this.catalogo.numero_wpp = value.numero_wpp;
             this.list = this.catalogo.produtos;
 
             this.createForm();
@@ -87,7 +89,8 @@ export class CatalogoComponent implements OnInit {
         this.catalogo.hora_inicio_entrega,
         Validators.required,
       ],
-      atual:[this.catalogo.atual]
+      atual:[this.catalogo.atual],
+      numero_wpp:[this.catalogo.numero_wpp,Validators.required]
     });
   }
 
@@ -196,7 +199,8 @@ export class CatalogoComponent implements OnInit {
       hora_confirmar: controls.hora_confirmar.value,
       hora_inicio_entrega: controls.hora_inicio_entrega.value,
       pedidos:this.pedidos,
-      atual:controls.atual.value
+      atual:controls.atual.value,
+      numero_wpp:controls.numero_wpp.value
     };
 
     return catalogo;

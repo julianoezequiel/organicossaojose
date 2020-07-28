@@ -14,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CatalogoService } from '../services/catalogo.service';
 import { PedidosService } from '../services/pedidos.service';
 import { unidades } from '../model/unidade-medida';
+import { Button } from 'protractor';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-pedido-cliente',
@@ -56,7 +58,8 @@ export class PedidoClienteComponent implements OnInit {
     private toastr: ToastrService,
     private catalogoService: CatalogoService,
     private activatedRoute: ActivatedRoute,
-    private pedidosService: PedidosService
+    private pedidosService: PedidosService,
+    private cp: CurrencyPipe
   ) {}
 
   ngOnInit() {
@@ -121,6 +124,11 @@ export class PedidoClienteComponent implements OnInit {
       Object.keys(controls).forEach((controlName) =>
         controls[controlName].markAsTouched()
       );
+      this.toastr.error("Informe o número do celular", "Atenção!", {
+        closeButton: true,
+        progressAnimation: "decreasing",
+        progressBar: true,
+      });
       return;
     }
 
@@ -135,24 +143,25 @@ export class PedidoClienteComponent implements OnInit {
   }
 
   addPedido(p: Pedido) {
-    this.pedidosService.create(p).then(() => {
-      this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
-        closeButton: true,
-        progressAnimation: "decreasing",
-        progressBar: true,
-      });   
+    this.pedidosService.create(p).then((pp) => {
+      // this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
+      //   closeButton: true,
+      //   progressAnimation: "decreasing",
+      //   progressBar: true,
+      // });   
+      p._id = pp.id;
       this.enviarWpp(p);   
     });
   }
   updatePedido(p: Pedido) {
     this.pedidosService.update(p._id, p).then(() => {
-      this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
-        closeButton: true,
-        progressAnimation: "decreasing",
-        progressBar: true,
-      });
+      // this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
+      //   closeButton: true,
+      //   progressAnimation: "decreasing",
+      //   progressBar: true,
+      // });
+      this.enviarWpp(p);
     });
-    this.enviarWpp(p);
   }
   preparePedido(): Pedido {
     const controls = this.pedidoForm.controls;
@@ -183,16 +192,31 @@ export class PedidoClienteComponent implements OnInit {
   }
 
   enviarWpp(p: Pedido){
-    let mensagem=JSON.stringify(p.produto_pedido);
-    let numero = this.apenasNumeros(p.numero_celular);
-    this.link = this.urlWpp + 'phone=55' + numero + '&text=' + mensagem;
+    let mensagem = 'Pedido \r\n cod: ' + p._id + '\r\r\n';
+    
+    p.produto_pedido.forEach((s)=>{
+       mensagem += s.descricao + ' - ' + s.quantidade + ' '+
+        s.unidade_medida.descricao +  ' - ' + this.cp.transform(s.valor_total,'BRL', 'symbol', '1.2-2') + '\r\n';
+    })
+
+    mensagem += 'Total = ' +  this.cp.transform(p.total_pedido,'BRL', 'symbol', '1.2-2');
+    let enconded = window.encodeURIComponent(mensagem);
+
+    let numero = this.apenasNumeros(this.catalogoAtual.numero_wpp);
+    this.link = this.urlWpp + 'phone=' + numero + '&text=' + enconded;
     const app = document.getElementById("form");
     const a= document.createElement("a");
     a.href=this.link;
+    a.target="_blank";
     app?.appendChild(a);
     a.click();
+
+    this.router.navigate(["pedido"]);
   }
 
+  fechar(){
+    window.close();
+  }
   createForm() {
     this.pedidoForm = this.fb.group({
       _id: [this.pedido._id],

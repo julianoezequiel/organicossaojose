@@ -52,6 +52,16 @@
       </mat-form-field>
     </div>
 
+    <div class="col">
+      <mat-form-field appearance="fill" >
+        <mat-label>Número para o pedido</mat-label>
+        <input matInput formControlName="numero_wpp">
+        <mat-error *ngIf="catalogoForm.controls['numero_wpp'].hasError('required')">
+          Informe o número para o <strong>pedido</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
   </div>
   <div class="row">
     <div class="col">

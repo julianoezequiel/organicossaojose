@@ -67,6 +67,7 @@ export class CatalogoService {
               hora_inicio_entrega: doc.data()["hora_inicio_entrega"],
               atual: doc.data()["atual"],
               pedidos: doc.data()["pedidos"],
+              numero_wpp:doc.data()["numero_wpp"],
             };
             lista.push(c);
           });
@@ -92,6 +93,7 @@ export class CatalogoService {
             hora_inicio_entrega: e.payload.doc.data()["hora_inicio_entrega"],
             atual: e.payload.doc.data()["atual"],
             pedidos: e.payload.doc.data()["pedidos"],
+            numero_wpp:e.payload.doc.data()["numero_wpp"],
           };
         });
         acept(lista);

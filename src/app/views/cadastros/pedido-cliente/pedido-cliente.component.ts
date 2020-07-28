@@ -37,7 +37,7 @@ export class PedidoClienteComponent implements OnInit {
     data: new Date(),
     dia_entrega: DiaSemana.SABADO,
     forma_pagamento: FormasPagamentos.DINHEIRO,
-    numero_celular: "",
+    numero_celular: "995705707",
     pago: false,
     produto_pedido: [],
     status: Status.EM_ANDAMENTO,
@@ -185,7 +185,12 @@ export class PedidoClienteComponent implements OnInit {
   enviarWpp(p: Pedido){
     let mensagem=JSON.stringify(p.produto_pedido);
     let numero = this.apenasNumeros(p.numero_celular);
-    this.link = this.urlWpp + 'phone=55' + this.apenasNumeros(numero) + '&text=' + mensagem;
+    this.link = this.urlWpp + 'phone=55' + numero + '&text=' + mensagem;
+    const app = document.getElementById("form");
+    const a= document.createElement("a");
+    a.href=this.link;
+    app?.appendChild(a);
+    a.click();
   }
 
   createForm() {

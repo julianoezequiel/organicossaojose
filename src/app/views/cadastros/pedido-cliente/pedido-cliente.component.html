@@ -1,12 +1,19 @@
+<mat-toolbar color="primary">
+  <mat-icon>shopping_cart</mat-icon>
+  <!-- <span class="example-spacer"></span> -->
+  <span>&nbsp;&nbsp;Meu Pedido</span>
+
+  <!-- <div class="row">
+    <div class="col-sm-12 col-xm-12 col-md-6">
+        <h3 class="text-center">Seu Pedido</h3>
+    </div> -->
+  <!-- <mat-card-title class="" style="justify-content: center"> </mat-card-title>        -->
+  <!-- <mat-card-title>Cadastrar Pedido</mat-card-title>        -->
+<!-- </div> -->
+</mat-toolbar>
 <form [formGroup]="pedidoForm" novalidate id="form">
     <mat-card class="" style="" > 
-        <div class="row">
-            <div class="col-sm-12 col-xm-12 col-md-6">
-                <h3 class="text-center">Seu Pedido</h3>
-            </div>
-          <!-- <mat-card-title class="" style="justify-content: center"> </mat-card-title>        -->
-          <!-- <mat-card-title>Cadastrar Pedido</mat-card-title>        -->
-        </div>
+       
       
       <!-- <mat-card-content> -->
         
@@ -52,7 +59,7 @@
         <div class="row" style="margin-bottom: 70px;">
           <div class="col">
             <div class="table-responsive">
-              <table class="table table-striped table-sm">
+              <table class="table table-sm">
                 <thead>
                   <tr>
                     <th>Produto</th>
@@ -66,16 +73,16 @@
                     <td class="td-prod-descr" style="width:50%">{{ prod.descricao }} <br>
                       {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }} </td>
                     <!-- <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td> -->
-                    <td class="td-prod-btn" style="width:115px; display: block;">   
-                      <span >
+                    <td class="td-prod-btn" >   
+                      <span class="span-btn" >
                        
-                        <button class="td-prod" type="button" mat-icon-button>
+                        <button style="padding: 0px;" class="td-prod mat-elevation-z1" type="button" mat-mini-fab color="default">
                             <mat-icon (click)="decrementarProd(prod)" class="icon-display">remove</mat-icon>
                           </button>
 
                         <p class="qtd"> {{prod.quantidade || 0}} </p>
                         
-                        <button class="td-prod"  type="button" mat-icon-button>
+                        <button style="padding: 0px;" class="td-prod mat-elevation-z1"  type="button" mat-mini-fab color="default">
                             <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
                           </button>
                       </span>             
@@ -95,8 +102,8 @@
     </mat-card>
 </form>
 <div class="row fixed-bottom" style="background-color: whitesmoke;">
-    <div class="col">
-      <p class="text-center" style="margin-top: 15px;"> <span class="align-middle">Total Pedido: {{total | currency:'BRL':true }}</span></p>      
+    <div class="col ">
+      <p class="text-center" style="margin-top: 15px;"> <span class="align-middle  mat-elevation-z1">Total Pedido: {{total | currency:'BRL':true }}</span></p>      
     </div>
     <button mat-raised-button color="primary" class="col-sm-12 col-md-1 col-xm-12" type="button" (click)="onSubmit()">Enviar</button>
 </div>

@@ -36,6 +36,7 @@
   .qtd{
     position: relative;
     text-align: center;
+    min-width: 20px;
     /* height: 10px; */
     display: inline-block;
     /* vertical-align: middle; */
@@ -60,11 +61,25 @@
   
   .td-prod-btn{
     vertical-align: middle;
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
     text-align: center;
   }
   
   .mat-button-toggle-button:focus {
     outline: none;
+  }
+
+  .span-btn{
+    width:115px;
+     display: block;
+     /* border-style: solid;
+     border-width: thin;
+     border-radius: 1em;
+     border-color: rgb(182, 182, 182); */
+     /* padding: 0px; */
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
   }

@@ -33,6 +33,11 @@ export class ProdutosService {
     return this.firestore.collection(this.collectionName).snapshotChanges();
   }
 
+  count() {
+    return this.firestore.collection(this.collectionName).valueChanges();
+  }
+
+
   delete(record_id) {
     return this.firestore.collection(this.collectionName).doc(record_id).delete();
   }

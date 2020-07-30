@@ -92,6 +92,8 @@ import { registerLocaleData ,CurrencyPipe} from '@angular/common';
 import { ProdutosService } from './views/cadastros/services/produtos.service';
 import { PedidosService } from './views/cadastros/services/pedidos.service';
 import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-cliente.component';
+import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
+import { PedidosHistoricoService } from './views/cadastros/services/pedidos-historico.service';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -156,7 +158,8 @@ registerLocaleData(localePt, 'pt-BR');
     CatalogoComponent,
     ListaProdutosCatalogoComponent,
     ListaCatalogosComponent,
-    PedidoClienteComponent
+    PedidoClienteComponent,
+    PaginaSucessoComponent
   ],
   providers: [{
     provide: LocationStrategy,
@@ -168,6 +171,7 @@ registerLocaleData(localePt, 'pt-BR');
   CatalogoService,
   PedidosService,
   ProdutosService,
+  PedidosHistoricoService,
   { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
   { provide: LOCALE_ID, useValue: 'pt-BR' }  ,

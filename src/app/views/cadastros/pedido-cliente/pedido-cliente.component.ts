@@ -172,7 +172,7 @@ export class PedidoClienteComponent implements OnInit {
       dia_entrega: controls.dia_entrega.value,
       forma_pagamento: controls.forma_pagamento.value,
       numero_celular: controls.numero_celular.value,
-      pago: controls.pago.value,
+      pago: false,
       produto_pedido: [],
       status: controls.status.value,
       total_pedido: controls.total_pedido.value,
@@ -211,7 +211,7 @@ export class PedidoClienteComponent implements OnInit {
     app?.appendChild(a);
     a.click();
 
-    this.router.navigate(["pedido"]);
+    this.router.navigate(["sucess"]);
   }
 
   fechar(){

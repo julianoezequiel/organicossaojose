@@ -14,6 +14,7 @@ import { Catalogo } from "../model/catalogo.model";
 import { PedidosService } from "../services/pedidos.service";
 import { Produto } from "../model/produto.model";
 import { UnidadeMedida, unidades } from "../model/unidade-medida";
+import { PedidosHistoricoService } from "../services/pedidos-historico.service";
 
 @Component({
   selector: "cadastro-pedidos",
@@ -27,7 +28,7 @@ export class CadastroPedidosComponent implements OnInit {
   pedidoForm: FormGroup;
   dia_semana: DiaSemana[] = [];
   produtos_disponoveis: Produto[] = [];
-  total :number = 0;
+  total: number = 0;
   pedido: Pedido = {
     _id: "",
     data: new Date(),
@@ -38,11 +39,10 @@ export class CadastroPedidosComponent implements OnInit {
     produto_pedido: [],
     status: Status.EM_ANDAMENTO,
     total_pedido: 0,
-    catalogo:null,
+    catalogo: null,
   };
 
   catalogoAtual: Catalogo;
-  
 
   constructor(
     private fb: FormBuilder,
@@ -52,7 +52,8 @@ export class CadastroPedidosComponent implements OnInit {
     private toastr: ToastrService,
     private catalogoService: CatalogoService,
     private activatedRoute: ActivatedRoute,
-    private pedidosService: PedidosService
+    private pedidosService: PedidosService,
+    private pedidosHistoricoService: PedidosHistoricoService
   ) {}
 
   ngOnInit() {
@@ -64,47 +65,41 @@ export class CadastroPedidosComponent implements OnInit {
     this.forma_pagamento.push(FormasPagamentos.DINHEIRO);
     this.forma_pagamento.push(FormasPagamentos.TRANFERENCIA);
     this.createForm();
-    
 
     this.createForm();
-    const routeSubscription = this.activatedRoute.params.subscribe(
-			(params) => {
-				const id = params.id;
-				if (id && id.length > 0) {
-					const material = this.pedidosService
-						.read(id)
-            .valueChanges();            
-					material.subscribe((value) => {
-            this.pedido._id = id;
-            this.pedido.data = value.data;
-            this.pedido.dia_entrega = value.dia_entrega;
-            this.pedido.forma_pagamento =value.forma_pagamento;
-            this.pedido.numero_celular = value.numero_celular;
-            this.pedido.pago = value.pago;
-            this.pedido.produto_pedido = value.produto_pedido;
-            this.pedido.status = value.status;
-            this.pedido.total_pedido = value.total_pedido;
-            this.pedido.catalogo =  value.catalogo;
-            this.catalogoAtual = value.catalogo;
-            this.catalogoAtual.produtos = this.pedido.produto_pedido;
-            this.calculaTotal();
-            this.createForm();
-					});						
-				} else{
-          this.listarCatAtual();
-        }
-			}
-		);
-		this.subscriptions.push(routeSubscription);
+    const routeSubscription = this.activatedRoute.params.subscribe((params) => {
+      const id = params.id;
+      if (id && id.length > 0) {
+        const material = this.pedidosService.read(id).valueChanges();
+        material.subscribe((value) => {
+          this.pedido._id = id;
+          this.pedido.data = value.data;
+          this.pedido.dia_entrega = value.dia_entrega;
+          this.pedido.forma_pagamento = value.forma_pagamento;
+          this.pedido.numero_celular = value.numero_celular;
+          this.pedido.pago = value.pago;
+          this.pedido.produto_pedido = value.produto_pedido;
+          this.pedido.status = value.status;
+          this.pedido.total_pedido = value.total_pedido;
+          this.pedido.catalogo = value.catalogo;
+          this.catalogoAtual = value.catalogo;
+          this.catalogoAtual.produtos = this.pedido.produto_pedido;
+          this.calculaTotal();
+          this.createForm();
+        });
+      } else {
+        this.listarCatAtual();
+      }
+    });
+    this.subscriptions.push(routeSubscription);
   }
 
   listarCatAtual() {
-    
     this.catalogoService.buscarAtual().then((c) => {
       if (c.length > 0) {
         this.catalogoAtual = c[0];
       } else {
-       this.router.navigate(["error"]);
+        this.router.navigate(["error"]);
       }
     });
   }
@@ -131,24 +126,50 @@ export class CadastroPedidosComponent implements OnInit {
   }
 
   addPedido(p: Pedido) {
-    this.pedidosService.create(p).then(() => {
-      this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
-        closeButton: true,
-        progressAnimation: "decreasing",
-        progressBar: true,
+    if (p.pago==true) {
+      this.pedidosService.delete(p._id).then(()=>{
+        this.pedidosHistoricoService.create(p).then(()=>{
+          this.toastr.success("Pedido enviado para o histórico", "Atenção!", {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          });
+          this.router.navigate(["lista-de-pedidos"], {});
+        });
       });
-      this.router.navigate(["lista-de-pedidos"], {});
-    });
+    } else {
+      this.pedidosService.create(p).then(() => {
+        this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+        this.router.navigate(["lista-de-pedidos"], {});
+      });
+    }
   }
   updatePedido(p: Pedido) {
-    this.pedidosService.update(p._id, p).then(() => {
-      this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
-        closeButton: true,
-        progressAnimation: "decreasing",
-        progressBar: true,
+    if (p.pago==true) {
+      this.pedidosService.delete(p._id).then(()=>{
+        this.pedidosHistoricoService.create(p).then(()=>{
+          this.toastr.success("Pedido enviado para o histórico", "Atenção!", {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          });
+          this.router.navigate(["lista-de-pedidos"], {});
+        });
       });
-      this.router.navigate(["lista-de-pedidos"], {});
-    });
+    } else {
+      this.pedidosService.update(p._id, p).then(() => {
+        this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+        this.router.navigate(["lista-de-pedidos"], {});
+      });
+    }
   }
   preparePedido(): Pedido {
     const controls = this.pedidoForm.controls;
@@ -163,13 +184,13 @@ export class CadastroPedidosComponent implements OnInit {
       produto_pedido: [],
       status: controls.status.value,
       total_pedido: controls.total_pedido.value,
-      catalogo:this.catalogoAtual,
+      catalogo: this.catalogoAtual,
     };
 
-    p.produto_pedido = this.catalogoAtual.produtos.filter((p:Produto)=>{
+    p.produto_pedido = this.catalogoAtual.produtos.filter((p: Produto) => {
       return p.quantidade > 0;
     });
-    
+
     p.total_pedido = this.total;
 
     delete this.catalogoAtual.produtos;
@@ -191,8 +212,6 @@ export class CadastroPedidosComponent implements OnInit {
       forma_pagamento: [this.pedido?.forma_pagamento, Validators.required],
     });
   }
-
-
 
   voltar() {
     this.router.navigate(["lista-de-pedidos"]);
@@ -253,10 +272,10 @@ export class CadastroPedidosComponent implements OnInit {
     return p.unidade_medida.descricao;
   }
 
-  calculaTotal(){
+  calculaTotal() {
     this.total = 0;
-    this.catalogoAtual.produtos.forEach((p:Produto)=>{
-      if(p.valor_total){
+    this.catalogoAtual.produtos.forEach((p: Produto) => {
+      if (p.valor_total) {
         this.total = this.total + p.valor_total;
       }
     });

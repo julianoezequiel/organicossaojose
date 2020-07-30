@@ -18,6 +18,8 @@ import { ListaProdutosComponent } from './views/cadastros/lista-produtos/lista-p
 import { ListaCatalogosComponent } from './views/cadastros/lista-catalogos/lista-catalogos.component';
 import { CatalogoComponent } from './views/cadastros/cadastro-catalogo/catalogo.component';
 import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-cliente.component';
+import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
+import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historico-pedidos/lista-historico-pedidos.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +33,13 @@ export const routes: Routes = [
     component: PedidoClienteComponent,
     data: {
       title: 'Pedido'
+    }
+  },
+  {
+    path: 'sucess',
+    component: PaginaSucessoComponent,
+    data: {
+      title: 'Sucesso'
     }
   },
   {
@@ -151,6 +160,13 @@ export const routes: Routes = [
         component: ListaCatalogosComponent,
         data: {
           title: 'Lista de Catalogos'
+        }
+      },
+      {
+        path: 'lista-de-historico',
+        component: ListaHistoricoPedidosComponent,
+        data: {
+          title: 'Lista de Histórico Pedidos'
         }
       },
       {

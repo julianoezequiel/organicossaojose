@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { ProdutosService } from "../services/produtos.service";
 import { MatDialog } from "@angular/material/dialog";
@@ -21,7 +21,7 @@ import { PedidosHistoricoService } from "../services/pedidos-historico.service";
   templateUrl: "./cadastro-pedidos.component.html",
   styleUrls: ["./cadastro-pedidos.component.css"],
 })
-export class CadastroPedidosComponent implements OnInit {
+export class CadastroPedidosComponent implements OnInit ,OnDestroy{
   private subscriptions: Subscription[] = [];
 
   forma_pagamento: FormasPagamentos[] = [];
@@ -29,6 +29,7 @@ export class CadastroPedidosComponent implements OnInit {
   dia_semana: DiaSemana[] = [];
   produtos_disponoveis: Produto[] = [];
   total: number = 0;
+  loading = true;
   pedido: Pedido = {
     _id: "",
     data: new Date(),
@@ -55,6 +56,10 @@ export class CadastroPedidosComponent implements OnInit {
     private pedidosService: PedidosService,
     private pedidosHistoricoService: PedidosHistoricoService
   ) {}
+
+  ngOnDestroy(): void {
+    this.loading = false;
+  }
 
   ngOnInit() {
     // this.dia_semana.push(DiaSemana.QUINTA);
@@ -86,9 +91,11 @@ export class CadastroPedidosComponent implements OnInit {
           this.catalogoAtual.produtos = this.pedido.produto_pedido;
           this.calculaTotal();
           this.createForm();
+          this.loading = false;
         });
       } else {
         this.listarCatAtual();
+        this.loading = false;
       }
     });
     this.subscriptions.push(routeSubscription);
@@ -126,6 +133,7 @@ export class CadastroPedidosComponent implements OnInit {
   }
 
   addPedido(p: Pedido) {
+    this.loading = true;
     if (p.pago==true) {
       this.pedidosService.delete(p._id).then(()=>{
         this.pedidosHistoricoService.create(p).then(()=>{
@@ -149,7 +157,8 @@ export class CadastroPedidosComponent implements OnInit {
     }
   }
   updatePedido(p: Pedido) {
-    if (p.pago==true) {
+    this.loading = true;
+    if (p.pago == true) {
       this.pedidosService.delete(p._id).then(()=>{
         this.pedidosHistoricoService.create(p).then(()=>{
           this.toastr.success("Pedido enviado para o histórico", "Atenção!", {
@@ -214,7 +223,7 @@ export class CadastroPedidosComponent implements OnInit {
   }
 
   voltar() {
-    this.router.navigate(["lista-de-pedidos"]);
+    window.history.back();
   }
 
   atualizarCat() {

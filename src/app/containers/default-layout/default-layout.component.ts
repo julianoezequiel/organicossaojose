@@ -10,6 +10,7 @@ export class DefaultLayoutComponent {
   public sidebarMinimized = false;
   public navItems = navItems;
 
+  
   constructor(private router: Router){
     console.log("inicializando layout");
   }

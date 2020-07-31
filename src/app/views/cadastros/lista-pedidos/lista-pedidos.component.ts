@@ -23,6 +23,7 @@ export class ListaPedidosComponent implements AfterViewInit, OnInit {
   dataSource: MatTableDataSource<Pedido>;
    
   data:Pedido[] ;
+  loading = true;
 
   constructor(
     private pedidosService: PedidosService,
@@ -70,7 +71,7 @@ export class ListaPedidosComponent implements AfterViewInit, OnInit {
           default: return item[property];
         }
       };
-      
+      this.loading = false;
     });
   }
 
@@ -115,6 +116,7 @@ export class ListaPedidosComponent implements AfterViewInit, OnInit {
   }
 
   excluir(m: Pedido) {
+    this.loading = true;
     if (m._id) {
       this.pedidosService.delete(m._id).then(() => {
         this.toastr.success("Pedido excluído com sucesso", "Atenção!", {
@@ -127,6 +129,7 @@ export class ListaPedidosComponent implements AfterViewInit, OnInit {
           this.dataSource = new MatTableDataSource(this.data);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
+          this.loading = false;
         });
       });
     }

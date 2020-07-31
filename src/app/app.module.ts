@@ -94,6 +94,7 @@ import { PedidosService } from './views/cadastros/services/pedidos.service';
 import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-cliente.component';
 import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
 import { PedidosHistoricoService } from './views/cadastros/services/pedidos-historico.service';
+import { NgxLoadingModule } from 'ngx-loading';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -135,6 +136,7 @@ registerLocaleData(localePt, 'pt-BR');
     MatDatepickerModule,
     MatNativeDateModule,
     MatSlideToggleModule,
+    NgxLoadingModule.forRoot({})
     
   ],
   declarations: [

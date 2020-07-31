@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           Validators.maxLength(320), // https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
         ]),
       ],
-      password: ["Abc1234",
+      password: ["123456",
         Validators.compose([
           Validators.required,
           Validators.minLength(3),
@@ -111,5 +111,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     const result =
       control.hasError(validationType) && (control.dirty || control.touched);
     return result;
+  }
+
+  esqueceuSenha(){
+
+    const controls = this.loginForm.controls;
+
+    let email = controls.email.value;
+    if(!email){
+      this.toastr.warning("Informe um email.",'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});   
+      return; 
+    }
+    this.loading = true;
+    this.auth.ForgotPassword(email).then((r)=>{
+      this.toastr.success('Link de recuperação enviado para seu email.','Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
+    }).catch((e)=>{
+      this.toastr.warning(e,'Atenção!' ,{closeButton:true,progressAnimation:"decreasing",progressBar:true});      
+    }).finally(()=>{
+      this.loading = false;
+    })
   }
 }

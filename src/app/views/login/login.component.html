@@ -1,4 +1,5 @@
-<div class="app-body">
+<div class="app-body app-body1">
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>
   <main class="main d-flex align-items-center">
     <div class="container">
       <div class="row">
@@ -7,26 +8,26 @@
             <div class="card p-4">
               <div class="card-body">
                 <form  [formGroup]="loginForm">
-                  <h1>Login</h1>
-                  <p class="text-muted">Sign In to your account</p>
+                  <!-- <h1>Orgânicos São José</h1> -->
+                  <!-- <p class="text-muted">Entrar em sua conta.</p> -->
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="icon-user"></i></span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Username" autocomplete="username" required formControlName="email" >
+                    <input type="text" class="form-control" placeholder="Email" autocomplete="username" required formControlName="email" >
                   </div>
                   <div class="input-group mb-4">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="icon-lock"></i></span>
                     </div>
-                    <input type="password" class="form-control" placeholder="Password" autocomplete="current-password" required formControlName="password">
+                    <input type="password" class="form-control" placeholder="Senha" autocomplete="current-password" required formControlName="password">
                   </div>
                   <div class="row">
                     <div class="col-6">
-                      <button type="button" class="btn btn-primary px-4" (click)="submit()">Login</button>
+                      <button type="button" class="btn btn-primary px-4" (click)="submit()">Entrar</button>
                     </div>
                     <div class="col-6 text-right">
-                      <button type="button" class="btn btn-link px-0">Forgot password?</button>
+                      <button (click)="esqueceuSenha()" type="button" class="btn btn-link px-0">Esqueceu a senha?</button>
                     </div>
                   </div>
                 </form>

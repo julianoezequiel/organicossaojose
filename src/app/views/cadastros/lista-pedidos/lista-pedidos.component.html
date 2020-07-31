@@ -27,7 +27,7 @@
     <mat-card class="semconteudo" *ngIf="semconteudo">
       <mat-card-subtitle> Sem pedido pendentes</mat-card-subtitle>
     </mat-card>
-    <div class="" *ngIf="!semconteudo">
+    <div class="table-responsive" *ngIf="!semconteudo">
       <table #table mat-table class="full-width-table" aria-label="Elements" matSort [dataSource]="dataSource">
 
 
@@ -66,3 +66,4 @@
     </div>
   </div>
 </mat-card>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

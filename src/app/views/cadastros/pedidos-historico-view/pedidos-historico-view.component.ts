@@ -13,16 +13,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CatalogoService } from '../services/catalogo.service';
 import { PedidosService } from '../services/pedidos.service';
+import { PedidosHistoricoService } from '../services/pedidos-historico.service';
 import { unidades } from '../model/unidade-medida';
-import { Button } from 'protractor';
-import { CurrencyPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-pedido-cliente',
-  templateUrl: './pedido-cliente.component.html',
-  styleUrls: ['./pedido-cliente.component.css']
+  selector: 'app-pedidos-historico-view',
+  templateUrl: './pedidos-historico-view.component.html',
+  styleUrls: ['./pedidos-historico-view.component.css']
 })
-export class PedidoClienteComponent implements OnInit {
+export class PedidosHistoricoViewComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
@@ -30,25 +29,22 @@ export class PedidoClienteComponent implements OnInit {
   pedidoForm: FormGroup;
   dia_semana: DiaSemana[] = [];
   produtos_disponoveis: Produto[] = [];
-  total :number = 0;
-  urlWpp = "https://api.whatsapp.com/send?" + "phone=55";
-  link:string;
-
+  total: number = 0;
+  loading = true;
   pedido: Pedido = {
     _id: "",
     data: new Date(),
     dia_entrega: DiaSemana.SABADO,
     forma_pagamento: FormasPagamentos.DINHEIRO,
-    numero_celular: "995705707",
+    numero_celular: "",
     pago: false,
     produto_pedido: [],
     status: Status.EM_ANDAMENTO,
     total_pedido: 0,
-    catalogo:null,
+    catalogo: null,
   };
 
   catalogoAtual: Catalogo;
-  
 
   constructor(
     private fb: FormBuilder,
@@ -58,9 +54,12 @@ export class PedidoClienteComponent implements OnInit {
     private toastr: ToastrService,
     private catalogoService: CatalogoService,
     private activatedRoute: ActivatedRoute,
-    private pedidosService: PedidosService,
-    private cp: CurrencyPipe
+    private pedidosHistoricoService: PedidosHistoricoService
   ) {}
+
+  ngOnDestroy(): void {
+    this.loading = false;
+  }
 
   ngOnInit() {
     // this.dia_semana.push(DiaSemana.QUINTA);
@@ -71,47 +70,45 @@ export class PedidoClienteComponent implements OnInit {
     this.forma_pagamento.push(FormasPagamentos.DINHEIRO);
     this.forma_pagamento.push(FormasPagamentos.TRANFERENCIA);
     this.createForm();
-    
 
     this.createForm();
-    const routeSubscription = this.activatedRoute.params.subscribe(
-			(params) => {
-				const id = params.id;
-				if (id && id.length > 0) {
-					const material = this.pedidosService
-						.read(id)
-            .valueChanges();            
-					material.subscribe((value) => {
-            this.pedido._id = id;
-            this.pedido.data = value.data;
-            this.pedido.dia_entrega = value.dia_entrega;
-            this.pedido.forma_pagamento =value.forma_pagamento;
-            this.pedido.numero_celular = value.numero_celular;
-            this.pedido.pago = value.pago;
-            this.pedido.produto_pedido = value.produto_pedido;
-            this.pedido.status = value.status;
-            this.pedido.total_pedido = value.total_pedido;
-            this.pedido.catalogo =  value.catalogo;
-            this.catalogoAtual = value.catalogo;
-            this.catalogoAtual.produtos = this.pedido.produto_pedido;
+    const routeSubscription = this.activatedRoute.params.subscribe((params) => {
+      const id = params.id;
+      if (id && id.length > 0) {
+        const material = this.pedidosHistoricoService.read(id).valueChanges();
+        material.subscribe((value) => {
+          this.pedido._id = id;
+          if(value){
+            this.pedido.data = value?.data;
+            this.pedido.dia_entrega = value?.dia_entrega;
+            this.pedido.forma_pagamento = value?.forma_pagamento;
+            this.pedido.numero_celular = value?.numero_celular;
+            this.pedido.pago = value?.pago;
+            this.pedido.produto_pedido = value?.produto_pedido;
+            this.pedido.status = value?.status;
+            this.pedido.total_pedido = value?.total_pedido;
+            this.pedido.catalogo = value?.catalogo;
+            this.catalogoAtual = value?.catalogo;
+            this.catalogoAtual.produtos = this.pedido?.produto_pedido;
             this.calculaTotal();
-            this.createForm();
-					});						
-				} else{
-          this.listarCatAtual();
-        }
-			}
-		);
-		this.subscriptions.push(routeSubscription);
+          }
+          this.createForm();
+          this.loading = false;
+        });
+      } else {
+        this.listarCatAtual();
+        this.loading = false;
+      }
+    });
+    this.subscriptions.push(routeSubscription);
   }
 
   listarCatAtual() {
-    
     this.catalogoService.buscarAtual().then((c) => {
       if (c.length > 0) {
         this.catalogoAtual = c[0];
       } else {
-       this.router.navigate(["error"]);
+        this.router.navigate(["error"]);
       }
     });
   }
@@ -124,24 +121,11 @@ export class PedidoClienteComponent implements OnInit {
       Object.keys(controls).forEach((controlName) =>
         controls[controlName].markAsTouched()
       );
-      this.toastr.warning("Informe o número do celular", "Atenção!", {
-        closeButton: true,
-        progressAnimation: "decreasing",
-        progressBar: true,
-      });
       return;
     }
 
     const prod: Pedido = this.preparePedido();
 
-    if(prod.produto_pedido.length <= 0){
-      this.toastr.warning("Selecione um ou mais produtos!", "Atenção!", {
-        closeButton: true,
-        progressAnimation: "decreasing",
-        progressBar: true,
-      });
-      return;
-    }
     if (prod._id) {
       this.updatePedido(prod);
       return;
@@ -151,25 +135,52 @@ export class PedidoClienteComponent implements OnInit {
   }
 
   addPedido(p: Pedido) {
-    this.pedidosService.create(p).then((pp) => {
-      // this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
-      //   closeButton: true,
-      //   progressAnimation: "decreasing",
-      //   progressBar: true,
-      // });   
-      p._id = pp.id;
-      this.enviarWpp(p);   
-    });
+    this.loading = true;
+    if (p.pago==true) {
+      this.pedidosHistoricoService.delete(p._id).then(()=>{
+        this.pedidosHistoricoService.create(p).then(()=>{
+          this.toastr.success("Pedido enviado para o histórico", "Atenção!", {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          });
+          this.router.navigate(["lista-de-pedidos"], {});
+        });
+      });
+    } else {
+      this.pedidosHistoricoService.create(p).then(() => {
+        this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+        this.router.navigate(["lista-de-pedidos"], {});
+      });
+    }
   }
   updatePedido(p: Pedido) {
-    this.pedidosService.update(p._id, p).then(() => {
-      // this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
-      //   closeButton: true,
-      //   progressAnimation: "decreasing",
-      //   progressBar: true,
-      // });
-      this.enviarWpp(p);
-    });
+    this.loading = true;
+    if (p.pago == "true" || p.pago == true)  {
+      this.pedidosHistoricoService.delete(p._id).then(()=>{
+        this.pedidosHistoricoService.create(p).then(()=>{
+          this.toastr.success("Pedido enviado para o histórico", "Atenção!", {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          });
+          this.router.navigate(["lista-de-pedidos"], {});
+        });
+      });
+    } else {
+      this.pedidosHistoricoService.update(p._id, p).then(() => {
+        this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
+          closeButton: true,
+          progressAnimation: "decreasing",
+          progressBar: true,
+        });
+        this.router.navigate(["lista-de-pedidos"], {});
+      });
+    }
   }
   preparePedido(): Pedido {
     const controls = this.pedidoForm.controls;
@@ -180,17 +191,17 @@ export class PedidoClienteComponent implements OnInit {
       dia_entrega: controls.dia_entrega.value,
       forma_pagamento: controls.forma_pagamento.value,
       numero_celular: controls.numero_celular.value,
-      pago: false,
+      pago: controls.pago.value,
       produto_pedido: [],
       status: controls.status.value,
       total_pedido: controls.total_pedido.value,
-      catalogo:this.catalogoAtual,
+      catalogo: this.catalogoAtual,
     };
 
-    p.produto_pedido = this.catalogoAtual.produtos.filter((p:Produto)=>{
+    p.produto_pedido = this.catalogoAtual.produtos.filter((p: Produto) => {
       return p.quantidade > 0;
     });
-    
+
     p.total_pedido = this.total;
 
     delete this.catalogoAtual.produtos;
@@ -199,38 +210,12 @@ export class PedidoClienteComponent implements OnInit {
     return p;
   }
 
-  enviarWpp(p: Pedido){
-    let mensagem = 'Pedido \r\n cod: ' + p._id + '\r\r\n';
-    
-    p.produto_pedido.forEach((s)=>{
-       mensagem += s.descricao + ' - ' + s.quantidade + ' '+
-        s.unidade_medida.descricao +  ' - ' + this.cp.transform(s.valor_total,'BRL', 'symbol', '1.2-2') + '\r\n';
-    })
-
-    mensagem += 'Total = ' +  this.cp.transform(p.total_pedido,'BRL', 'symbol', '1.2-2');
-    let enconded = window.encodeURIComponent(mensagem);
-
-    let numero = this.apenasNumeros(this.catalogoAtual.numero_wpp);
-    this.link = this.urlWpp + 'phone=' + numero + '&text=' + enconded;
-    const app = document.getElementById("form");
-    const a= document.createElement("a");
-    a.href=this.link;
-    a.target="_blank";
-    app?.appendChild(a);
-    a.click();
-
-    this.router.navigate(["sucess"]);
-  }
-
-  fechar(){
-    window.close();
-  }
   createForm() {
     this.pedidoForm = this.fb.group({
       _id: [this.pedido._id],
       data: [this.pedido.data, Validators.required],
       dia_entrega: [this.pedido.dia_entrega],
-      numero_celular: [this.pedido.numero_celular, Validators.required],
+      numero_celular: [{value:this.pedido.numero_celular,disabled:true}, Validators.required],
       pago: [this.pedido.pago],
       produto_pedido: [this.pedido.produto_pedido],
       status: [this.pedido?.status, Validators.required],
@@ -239,14 +224,8 @@ export class PedidoClienteComponent implements OnInit {
     });
   }
 
-  apenasNumeros(string) {
-    var numsStr = string.replace(/[^0-9]/g, '');
-    return parseInt(numsStr);
-  }
-
-
   voltar() {
-    this.router.navigate(["lista-de-pedidos"]);
+    window.history.back();
   }
 
   atualizarCat() {
@@ -304,12 +283,13 @@ export class PedidoClienteComponent implements OnInit {
     return p.unidade_medida.descricao;
   }
 
-  calculaTotal(){
+  calculaTotal() {
     this.total = 0;
-    this.catalogoAtual.produtos.forEach((p:Produto)=>{
-      if(p.valor_total){
+    this.catalogoAtual.produtos.forEach((p: Produto) => {
+      if (p.valor_total) {
         this.total = this.total + p.valor_total;
       }
     });
   }
+
 }

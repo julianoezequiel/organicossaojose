@@ -78,18 +78,20 @@ export class CadastroPedidosComponent implements OnInit ,OnDestroy{
         const material = this.pedidosService.read(id).valueChanges();
         material.subscribe((value) => {
           this.pedido._id = id;
-          this.pedido.data = value.data;
-          this.pedido.dia_entrega = value.dia_entrega;
-          this.pedido.forma_pagamento = value.forma_pagamento;
-          this.pedido.numero_celular = value.numero_celular;
-          this.pedido.pago = value.pago;
-          this.pedido.produto_pedido = value.produto_pedido;
-          this.pedido.status = value.status;
-          this.pedido.total_pedido = value.total_pedido;
-          this.pedido.catalogo = value.catalogo;
-          this.catalogoAtual = value.catalogo;
-          this.catalogoAtual.produtos = this.pedido.produto_pedido;
-          this.calculaTotal();
+          if(value){
+            this.pedido.data = value?.data;
+            this.pedido.dia_entrega = value?.dia_entrega;
+            this.pedido.forma_pagamento = value?.forma_pagamento;
+            this.pedido.numero_celular = value?.numero_celular;
+            this.pedido.pago = value?.pago;
+            this.pedido.produto_pedido = value?.produto_pedido;
+            this.pedido.status = value?.status;
+            this.pedido.total_pedido = value?.total_pedido;
+            this.pedido.catalogo = value?.catalogo;
+            this.catalogoAtual = value?.catalogo;
+            this.catalogoAtual.produtos = this.pedido?.produto_pedido;
+            this.calculaTotal();
+          }
           this.createForm();
           this.loading = false;
         });
@@ -158,7 +160,7 @@ export class CadastroPedidosComponent implements OnInit ,OnDestroy{
   }
   updatePedido(p: Pedido) {
     this.loading = true;
-    if (p.pago == true) {
+    if (p.pago == "true" || p.pago == true)  {
       this.pedidosService.delete(p._id).then(()=>{
         this.pedidosHistoricoService.create(p).then(()=>{
           this.toastr.success("Pedido enviado para o histórico", "Atenção!", {

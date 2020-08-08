@@ -20,6 +20,7 @@ import { CatalogoComponent } from './views/cadastros/cadastro-catalogo/catalogo.
 import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-cliente.component';
 import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
 import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historico-pedidos/lista-historico-pedidos.component';
+import { PedidosHistoricoViewComponent } from './views/cadastros/pedidos-historico-view/pedidos-historico-view.component';
 
 export const routes: Routes = [
   {
@@ -167,6 +168,13 @@ export const routes: Routes = [
         component: ListaHistoricoPedidosComponent,
         data: {
           title: 'Lista de Histórico Pedidos'
+        }
+      },
+      {
+        path: 'historico/:id',
+        component: PedidosHistoricoViewComponent,
+        data: {
+          title: 'Histórico Pedidos'
         }
       },
       {

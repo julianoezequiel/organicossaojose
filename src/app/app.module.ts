@@ -95,6 +95,7 @@ import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-
 import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
 import { PedidosHistoricoService } from './views/cadastros/services/pedidos-historico.service';
 import { NgxLoadingModule } from 'ngx-loading';
+import { PedidosHistoricoViewComponent } from './views/cadastros/pedidos-historico-view/pedidos-historico-view.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -161,7 +162,8 @@ registerLocaleData(localePt, 'pt-BR');
     ListaProdutosCatalogoComponent,
     ListaCatalogosComponent,
     PedidoClienteComponent,
-    PaginaSucessoComponent
+    PaginaSucessoComponent,
+    PedidosHistoricoViewComponent
   ],
   providers: [{
     provide: LocationStrategy,

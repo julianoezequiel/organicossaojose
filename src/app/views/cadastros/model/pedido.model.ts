@@ -13,6 +13,6 @@ export class Pedido {
     status:Status;
     forma_pagamento:FormasPagamentos;
     dia_entrega:DiaSemana;
-    pago:boolean;
+    pago:boolean | string;
     catalogo:Catalogo;
 }

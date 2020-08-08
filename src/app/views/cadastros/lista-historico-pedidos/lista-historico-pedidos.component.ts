@@ -90,7 +90,7 @@ export class ListaHistoricoPedidosComponent implements AfterViewInit, OnInit {
   }
 
   editar(id) {
-    this.router.navigate(["../cadastro-pedidos", id], {
+    this.router.navigate(["../historico", id], {
       relativeTo: this.activatedRoute,
     });
   }

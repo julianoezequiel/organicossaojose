@@ -10,6 +10,8 @@ import { ToastrService } from "ngx-toastr";
 import { CatalogoService } from "../services/catalogo.service";
 import { Subscription } from 'rxjs';
 import { Pedido } from '../model/pedido.model';
+import { PedidosService } from '../services/pedidos.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: "app-catalogo",
@@ -24,9 +26,14 @@ export class CatalogoComponent implements OnInit {
     private toastr: ToastrService,
     private catalogoService: CatalogoService,
     private activatedRoute: ActivatedRoute,
-  ) {}
+    private pedidosService: PedidosService,
+  ) {
+    this.datePipe = new DatePipe("pt-BR");
+  }
 
   private subscriptions: Subscription[] = [];
+  
+  datePipe: DatePipe; 
   
   catalogoForm: FormGroup;
   list: Produto[] = [];
@@ -204,5 +211,59 @@ export class CatalogoComponent implements OnInit {
     };
 
     return catalogo;
+  }
+
+  gerarTotal(){
+    let listaProd:Produto[] = [];
+
+    this.pedidosService.buscarPorCatalogo(this.catalogo._id).then((p)=>{
+      p.forEach((ped:Pedido)=>{
+        ped.produto_pedido.forEach((prod:Produto)=>{
+         listaProd.push(prod);          
+        });
+      });
+     
+     
+      let result:Produto[] = [];
+      listaProd.reduce(function(res, value) {
+        if (!res[value._id]) {
+          res[value._id] = { _id: value._id, quantidade: 0, unidade_medida:value.unidade_medida ,descricao:value.descricao};
+          result.push(res[value._id])
+        }
+        res[value._id].quantidade += value.quantidade;
+        return res;
+      }, {});
+
+    console.log(result);
+
+    let relatorio : string = 'Total dod Pedidos do Catálogo de ' + this.datePipe.transform(this.catalogo.data_entrega,'dd/MM/yyyy HH:mm') + '\n\r';
+    result.forEach((s)=>{
+      relatorio += '\t' + s.descricao + ' - qtd: ' + s.quantidade + s.unidade_medida.descricao + '\n';
+    })
+    var textFileAsBlob = new Blob([relatorio], {type:'text/plain'});
+
+    var fileNameToSaveAs = "Total pedido";
+			var downloadLink = document.createElement("a");
+			downloadLink.download = fileNameToSaveAs;
+			downloadLink.innerHTML = "Download File";
+			if (window.webkitURL != null)
+			{
+				// Chrome allows the link to be clicked
+				// without actually adding it to the DOM.
+				downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+			}
+			else
+			{
+				// Firefox requires the link to be added to the DOM
+				// before it can be clicked.
+				downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+				// downloadLink.onclick = destroyClickedElement;
+				downloadLink.style.display = "none";
+				document.body.appendChild(downloadLink);
+			}
+
+			downloadLink.click();
+
+    })
   }
 }

@@ -44,6 +44,21 @@ export class PedidosService {
       .delete();
   }
 
+  buscarPorCatalogo(_id: string): Promise<Pedido[]> {
+    return new Promise<Pedido[]>((acept, reject) => {
+      var docs = this.firestore
+        .collection(this.collectionName)
+        .ref.where("catalogo._id", "==", _id);
+      let lista: any[] = [];
+      docs.get().then(function (d) {
+        d.forEach((e) => {
+          lista.push(e.data());
+        });
+        acept(lista);
+      });
+    });
+  }
+
   listar(): Promise<Pedido[]> {
     return new Promise<Pedido[]>((acept, reject) => {
       this.read_all().subscribe((data) => {
@@ -57,8 +72,8 @@ export class PedidosService {
             pago: e.payload.doc.data()["pago"],
             produto_pedido: e.payload.doc.data()["produto_pedido"],
             status: e.payload.doc.data()["status"],
-            total_pedido: e.payload.doc.data()["total_pedido"],            
-            catalogo:e.payload.doc.data()["catalogo"],
+            total_pedido: e.payload.doc.data()["total_pedido"],
+            catalogo: e.payload.doc.data()["catalogo"],
           };
         });
         acept(lista);

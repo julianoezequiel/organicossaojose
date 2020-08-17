@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   initLoginForm() {
     this.loginForm = this.fb.group({
-      email: ["julianoezequiel@gmail.com",
+      email: ["",
         Validators.compose([
           Validators.required,
           // Validators.email,
@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           Validators.maxLength(320), // https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
         ]),
       ],
-      password: ["123456",
+      password: ["",
         Validators.compose([
           Validators.required,
           Validators.minLength(3),

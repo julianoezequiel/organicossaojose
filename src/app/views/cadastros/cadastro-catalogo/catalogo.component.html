@@ -74,7 +74,8 @@
   <div class="row">
       <div class="col">
         <mat-card-actions>
-          <button  style="float: left;margin: 15px;" mat-button mat-raised-button color="default" type="button" (click)="openDialog()">Abrir lista</button>  
+          <button mat-button mat-raised-button color="default" type="button" (click)="openDialog()">Abrir lista</button>  
+          <button mat-button mat-raised-button color="default" type="button" (click)="gerarTotal()" >Total de pedidos</button>
         </mat-card-actions>
         <div fxFlex="100%" style="height: 40px;"></div>
         <mat-card-content >
@@ -94,7 +95,7 @@
   </div>  
   <mat-card-actions>
     <button mat-raised-button color="primary" type="submit">Salvar</button>
-    <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">Voltar</button>
+    <button  style="float: right;" mat-raised-button color="danger" type="button" (click)="voltar()">Voltar</button>    
   </mat-card-actions>
 </mat-card>
 </form>

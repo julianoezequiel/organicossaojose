@@ -236,7 +236,7 @@ export class CatalogoComponent implements OnInit {
 
     console.log(result);
 
-    let relatorio : string = 'Total dod Pedidos do Catálogo de ' + this.datePipe.transform(this.catalogo.data_entrega,'dd/MM/yyyy HH:mm') + '\n\r';
+    let relatorio : string = 'Totais Pedidos do Catálogo de ' + this.datePipe.transform(this.catalogo.data_entrega,'dd/MM/yyyy HH:mm') + '\n\r';
     result.forEach((s)=>{
       relatorio += '\t' + s.descricao + ' - qtd: ' + s.quantidade + s.unidade_medida.descricao + '\n';
     })

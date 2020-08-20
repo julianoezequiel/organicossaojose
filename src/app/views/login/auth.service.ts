@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from "@angular/core";
+import { Injectable, NgZone, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import { Router } from "@angular/router";
@@ -11,10 +11,9 @@ import {
 } from "@angular/fire/firestore";
 import { environment } from "../../../environments/environment";
 import { UserFirebase } from "./userfirebase.model";
-import { rejects } from "assert";
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnInit{
   userData: any; // Save logged in user data
   constructor(
     private http: HttpClient,
@@ -35,9 +34,18 @@ export class AuthService {
         JSON.parse(localStorage.getItem("user"));
       }
     });
+  }
+  ngOnInit(): void {
+      // var admin = require("firebase-admin");
+
+      // var serviceAccount = require("c:/organicossaojose-19c51-firebase-adminsdk-ej113-3a441338fe.json");
+
+      // admin.initializeApp({
+      //   credential: admin.credential.cert(serviceAccount),
+      //   databaseURL: "https://organicossaojose-19c51.firebaseio.com",
+      // });
 
   }
-
 
   /*
    * Handle Http operation that failed.
@@ -76,10 +84,13 @@ export class AuthService {
   }
 
   // Sign up with email/password
-  async SignUp(userFirebase: UserFirebase) : Promise<UserFirebase>{
+  async SignUp(userFirebase: UserFirebase): Promise<UserFirebase> {
     return new Promise((resolve, reject) => {
       this.afAuth
-        .createUserWithEmailAndPassword(userFirebase.email, userFirebase.password)
+        .createUserWithEmailAndPassword(
+          userFirebase.email,
+          userFirebase.password
+        )
         .then((result) => {
           this.SendVerificationMail().then(() => {
             const userData: UserFirebase = {
@@ -88,15 +99,15 @@ export class AuthService {
               displayName: userFirebase.displayName,
               photoURL: result.user.photoURL,
               emailVerified: result.user.emailVerified,
-              password:'',
-              password2:''
+              password: "",
+              password2: "",
             };
             this.SetUserData(userData);
             resolve(userData);
           });
         })
         .catch((error) => {
-         reject(error);
+          reject(error);
         });
     });
   }
@@ -104,7 +115,7 @@ export class AuthService {
   // Send email verfificaiton when new user sign up
   SendVerificationMail() {
     return this.afAuth.currentUser.then((u) => {
-      u.sendEmailVerification().then((result)=>{
+      u.sendEmailVerification().then((result) => {
         console.log(result);
       });
       // this.router.navigate(["verify-email-address"]);
@@ -113,19 +124,18 @@ export class AuthService {
 
   // Reset Forggot password
   ForgotPassword(passwordResetEmail) {
-    return new Promise((acept,reject)=>{
+    return new Promise((acept, reject) => {
       this.afAuth
-      .sendPasswordResetEmail(passwordResetEmail)
-      .then((success) => {
-        acept(success);
-      })
-      .catch((error) => {
-       reject(error);
-      });
-    })
+        .sendPasswordResetEmail(passwordResetEmail)
+        .then((success) => {
+          acept(success);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 
- 
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -167,8 +177,8 @@ export class AuthService {
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
-      password:'',
-      password2:''
+      password: "",
+      password2: "",
     };
 
     return userRef.set(userData, {
@@ -182,5 +192,18 @@ export class AuthService {
       localStorage.removeItem("user");
       this.router.navigate(["sign-in"]);
     });
+  }
+
+  excluir(uid) {
+    return null;
+    //  admin
+    //   .auth()
+    //   .deleteUser(uid)
+    //   .then(function () {
+    //     console.log("Successfully deleted user");
+    //   })
+    //   .catch(function (error) {
+    //     console.log("Error deleting user:", error);
+    //   });
   }
 }

@@ -1,6 +1,6 @@
 <div class="app flex-row align-items-center">
     <div class="container">
-      <div class="row justify-content-center">
+      <div class="row justify-content-center" *ngIf="!isCarregando">
         <div class="col-md-6">
           <div class="clearfix">
             <!-- <h1 class="float-left display-3 mr-4"></h1> -->
@@ -15,6 +15,15 @@
               <button (click)="gotoNovo()" class="btn btn-info" type="button">Novo Pedido</button>
             </span>
           </div>
+        </div>
+      </div>
+      <div class="row justify-content-center" *ngIf="isCarregando">
+        <div class="col-md-6">
+          <div class="clearfix">
+            <!-- <h1 class="float-left display-3 mr-4"></h1> -->
+            <h4 class="pt-3">Aguarde!</h4>
+            <p class="text-muted">Enviando pedido para o Whatsapp.</p>
+          </div>          
         </div>
       </div>
     </div>

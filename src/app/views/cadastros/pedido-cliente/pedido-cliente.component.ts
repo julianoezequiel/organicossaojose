@@ -39,7 +39,7 @@ export class PedidoClienteComponent implements OnInit {
     data: new Date(),
     dia_entrega: DiaSemana.SABADO,
     forma_pagamento: FormasPagamentos.DINHEIRO,
-    numero_celular: "995705707",
+    numero_celular: "",
     pago: false,
     produto_pedido: [],
     status: Status.EM_ANDAMENTO,
@@ -142,9 +142,12 @@ export class PedidoClienteComponent implements OnInit {
       });
       return;
     }
+    
+    delete this.catalogoAtual.produtos;
+    delete this.catalogoAtual.pedidos;
+
     if (prod._id) {
       this.updatePedido(prod);
-      return;
     }
 
     this.addPedido(prod);
@@ -193,13 +196,14 @@ export class PedidoClienteComponent implements OnInit {
     
     p.total_pedido = this.total;
 
-    delete this.catalogoAtual.produtos;
-    delete this.catalogoAtual.pedidos;
 
     return p;
   }
 
   enviarWpp(p: Pedido){
+    
+    this.router.navigate(["sucess"]);
+
     let mensagem = 'Pedido \r\n cod: ' + p._id + '\r\r\n';
     
     p.produto_pedido.forEach((s)=>{
@@ -215,11 +219,10 @@ export class PedidoClienteComponent implements OnInit {
     const app = document.getElementById("form");
     const a= document.createElement("a");
     a.href=this.link;
-    a.target="_blank";
+    // a.target="_blank";
     app?.appendChild(a);
-    a.click();
-
-    this.router.navigate(["sucess"]);
+    a.click();   
+    
   }
 
   fechar(){

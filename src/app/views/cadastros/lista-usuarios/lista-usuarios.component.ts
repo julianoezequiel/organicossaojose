@@ -81,19 +81,28 @@ export class ListaUsuariosComponent implements AfterViewInit, OnInit {
 
   excluir(m: UserFirebase) {
     if (m.uid) {
-      this.usuarioService.delete(m.uid).then(() => {
-        this.toastr.success("Usuário excluído com sucesso", "Atenção!", {
-          closeButton: true,
-          progressAnimation: "decreasing",
-          progressBar: true,
+      // this.auth.excluir(m.uid).then(()=>{
+        this.usuarioService.delete(m.uid).then(() => {
+          this.toastr.success("Usuário excluído com sucesso", "Atenção!", {
+            closeButton: true,
+            progressAnimation: "decreasing",
+            progressBar: true,
+          });
+          this.usuarioService.listar().then((data)=>{
+            this.data = data;      
+            this.dataSource = new MatTableDataSource(this.data);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+          });
         });
-        this.usuarioService.listar().then((data)=>{
-          this.data = data;      
-          this.dataSource = new MatTableDataSource(this.data);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-        });
-      });
+      // }).catch(()=>{
+      //   this.toastr.warning("Não foi possível excluir o usuário", "Atenção!", {
+      //     closeButton: true,
+      //     progressAnimation: "decreasing",
+      //     progressBar: true,
+      //   });
+      // });
+     
     }
   }
 

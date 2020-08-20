@@ -97,6 +97,7 @@ import { PedidosHistoricoService } from './views/cadastros/services/pedidos-hist
 import { NgxLoadingModule } from 'ngx-loading';
 import { PedidosHistoricoViewComponent } from './views/cadastros/pedidos-historico-view/pedidos-historico-view.component';
 
+
 registerLocaleData(localePt, 'pt-BR');
 
 @NgModule({
@@ -114,6 +115,7 @@ registerLocaleData(localePt, 'pt-BR');
     TabsModule.forRoot(),
     ChartsModule,
     AngularFireModule.initializeApp(environment.firebase),
+   
     AngularFireAuthModule,
     AngularFirestoreModule,
     FormsModule,

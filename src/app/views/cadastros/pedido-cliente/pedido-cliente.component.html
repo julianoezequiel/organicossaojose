@@ -18,6 +18,45 @@
       <!-- <mat-card-content> -->
         
         <div class="row">
+          <div class="col">
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <!-- <th>Preço</th> -->
+                    <th class="td-prod-btn">qtd</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos">
+                    <td class="td-prod-descr" style="width:50%">{{ prod.descricao }} <br>
+                      {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }} </td>
+                    <!-- <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td> -->
+                    <td class="td-prod-btn" >   
+                      <span class="span-btn" >
+                       
+                        <button  class="td-prod mat-elevation-z1" type="button" mat-mini-fab color="default">
+                            <mat-icon (click)="decrementarProd(prod)" class="icon-display">remove</mat-icon>
+                          </button>
+
+                        <p class="qtd"> {{prod.quantidade || 0}} </p>
+                        
+                        <button  class="td-prod mat-elevation-z1"  type="button" mat-mini-fab color="default">
+                            <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
+                          </button>
+                      </span>             
+                    </td>
+                    <td class="td-prod">{{(prod?.valor_total != null) ? (prod.valor_total | currency:'BRL':true) : (0 | currency:'BRL':true)}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>         
+          </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 70px;">
           <div class="col-sm-12 col-xm-12 col-md-6">
             <mat-form-field class="full-width">
               <mat-label>Celular</mat-label>
@@ -55,45 +94,6 @@
           </div>  
           
         </div> 
-     
-        <div class="row" style="margin-bottom: 70px;">
-          <div class="col">
-            <div class="table-responsive">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>Produto</th>
-                    <!-- <th>Preço</th> -->
-                    <th class="td-prod-btn">qtd</th>
-                    <th>Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos">
-                    <td class="td-prod-descr" style="width:50%">{{ prod.descricao }} <br>
-                      {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }} </td>
-                    <!-- <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td> -->
-                    <td class="td-prod-btn" >   
-                      <span class="span-btn" >
-                       
-                        <button style="padding: 0px;" class="td-prod mat-elevation-z1" type="button" mat-mini-fab color="default">
-                            <mat-icon (click)="decrementarProd(prod)" class="icon-display">remove</mat-icon>
-                          </button>
-
-                        <p class="qtd"> {{prod.quantidade || 0}} </p>
-                        
-                        <button style="padding: 0px;" class="td-prod mat-elevation-z1"  type="button" mat-mini-fab color="default">
-                            <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
-                          </button>
-                      </span>             
-                    </td>
-                    <td class="td-prod" style="font-size: 10px;">{{(prod?.valor_total != null) ? (prod.valor_total | currency:'BRL':true) : (0 | currency:'BRL':true)}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>         
-          </div>
-        </div>
       <!-- </mat-card-content> -->
       <!-- <mat-card-actions style="margin-bottom: 20px;"> -->
         <!-- <button mat-raised-button color="primary" type="submit">Salvar</button> -->
@@ -105,6 +105,6 @@
     <div class="col ">
       <p class="text-center" style="margin-top: 15px;"> <span class="align-middle  mat-elevation-z1">Total Pedido: {{total | currency:'BRL':true }}</span></p>      
     </div>
-    <button style="margin: 5px 20px 5px 5px ;" mat-raised-button color="primary" class="col-sm-12 col-md-1 col-xm-12" type="button" (click)="onSubmit()">Enviar</button>
+    <button style="margin: 5px 20px 5px 5px ;" mat-raised-button color="primary" class="col-sm-12 col-md-1 col-xm-12" type="button" (click)="onSubmit()">Enviar para Whatsapp</button>
 </div>
   

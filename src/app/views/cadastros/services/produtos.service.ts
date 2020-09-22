@@ -55,7 +55,8 @@ export class ProdutosService {
            valorA:e.payload.doc.data()["valorA"],
            valorB:e.payload.doc.data()["valorB"],
            quantidade:0,
-           valor_total:0
+           valor_total:0,
+           index:e.payload.doc.data()["index"],
          }
        })
        acept(lista);

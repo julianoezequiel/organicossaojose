@@ -97,6 +97,7 @@ import { PedidosHistoricoService } from './views/cadastros/services/pedidos-hist
 import { NgxLoadingModule } from 'ngx-loading';
 import { PedidosHistoricoViewComponent } from './views/cadastros/pedidos-historico-view/pedidos-historico-view.component';
 
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -139,7 +140,8 @@ registerLocaleData(localePt, 'pt-BR');
     MatDatepickerModule,
     MatNativeDateModule,
     MatSlideToggleModule,
-    NgxLoadingModule.forRoot({})
+    NgxLoadingModule.forRoot({}),
+    DragDropModule
     
   ],
   declarations: [

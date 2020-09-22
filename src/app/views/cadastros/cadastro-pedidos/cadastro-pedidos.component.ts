@@ -273,6 +273,7 @@ export class CadastroPedidosComponent implements OnInit ,OnDestroy{
       valorA: 0,
       valorB: 0,
       valor_total: 1,
+      index:p.index
     };
   }
 

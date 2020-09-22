@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { Pedido } from '../model/pedido.model';
 import { PedidosService } from '../services/pedidos.service';
 import { DatePipe } from '@angular/common';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: "app-catalogo",
@@ -103,7 +104,7 @@ export class CatalogoComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(ListaProdutosCatalogoComponent, {
-      width: "250px",
+      // width: "250px",
       data: this.list,
     });
 
@@ -265,5 +266,9 @@ export class CatalogoComponent implements OnInit {
 			downloadLink.click();
 
     })
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.list, event.previousIndex, event.currentIndex);
   }
 }

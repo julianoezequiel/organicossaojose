@@ -79,17 +79,23 @@
         </mat-card-actions>
         <div fxFlex="100%" style="height: 40px;"></div>
         <mat-card-content >
-          <mat-list>
+          <mat-list cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
             <mat-list-item *ngIf="list.length==0">
               Nenhum item adicionado
             </mat-list-item>
-            <mat-list-item *ngFor="let prod of list">
+            <mat-list-item *ngFor="let prod of list" cdkDrag>
               <button mat-icon-button color="accent">
                 <mat-icon (click)="remover(prod)">delete</mat-icon>
               </button>
-              {{ prod.descricao }}
+              <span style="cursor: move;">{{ prod.descricao }}</span>
             </mat-list-item>
           </mat-list>
+          <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let prod of list" cdkDrag>
+              <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+              {{prod.descricao}}
+            </div>
+          </div> -->
         </mat-card-content>      
     </div>
   </div>  

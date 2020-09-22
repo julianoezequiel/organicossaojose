@@ -10,4 +10,5 @@ export interface Produto{
     limite:number;
     quantidade:number;
     valor_total:number;
+    index:number;
 }

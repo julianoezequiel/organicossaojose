@@ -273,6 +273,7 @@ export class PedidosHistoricoViewComponent implements OnInit {
       valorA: 0,
       valorB: 0,
       valor_total: 1,
+      index:p.index
     };
   }
 

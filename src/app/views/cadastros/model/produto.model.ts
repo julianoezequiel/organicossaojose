@@ -11,4 +11,5 @@ export interface Produto{
     quantidade:number;
     valor_total:number;
     index:number;
+    cod_fornecedor:string;
 }

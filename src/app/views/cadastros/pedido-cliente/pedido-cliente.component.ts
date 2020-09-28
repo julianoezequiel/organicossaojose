@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormasPagamentos } from '../model/formas-pagamento.enum';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -17,6 +17,19 @@ import { unidades } from '../model/unidade-medida';
 import { Button } from 'protractor';
 import { CurrencyPipe } from '@angular/common';
 
+@Pipe({
+  name: 'searchfilter'
+})
+@Injectable()
+export class SearchFilterPipe implements PipeTransform {
+  transform(items: Produto[], value: string): any[] {
+    if (!items || !value) {
+      return items;
+    }
+    console.log("your search token = "+value);
+    return items.filter(e => e.descricao.toLowerCase().includes(value.toLocaleLowerCase()));
+  }
+}
 @Component({
   selector: 'app-pedido-cliente',
   templateUrl: './pedido-cliente.component.html',
@@ -37,7 +50,7 @@ export class PedidoClienteComponent implements OnInit {
   pedido: Pedido = {
     _id: "",
     data: new Date(),
-    dia_entrega: DiaSemana.SABADO,
+    dia_entrega: DiaSemana.SEXTA,
     forma_pagamento: FormasPagamentos.DINHEIRO,
     numero_celular: "",
     pago: false,
@@ -297,7 +310,8 @@ export class PedidoClienteComponent implements OnInit {
       valorA: 0,
       valorB: 0,
       valor_total: 1,
-      index:p.index
+      index:p.index,
+      cod_fornecedor:p.cod_fornecedor
     };
   }
 

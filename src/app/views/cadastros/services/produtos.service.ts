@@ -57,6 +57,7 @@ export class ProdutosService {
            quantidade:0,
            valor_total:0,
            index:e.payload.doc.data()["index"],
+           cod_fornecedor:e.payload.doc.data()["cod_fornecedor"],
          }
        })
        acept(lista);

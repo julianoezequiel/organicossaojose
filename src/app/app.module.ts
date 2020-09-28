@@ -91,7 +91,7 @@ import localePt from '@angular/common/locales/pt';
 import { registerLocaleData ,CurrencyPipe} from '@angular/common';
 import { ProdutosService } from './views/cadastros/services/produtos.service';
 import { PedidosService } from './views/cadastros/services/pedidos.service';
-import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-cliente.component';
+import { PedidoClienteComponent, SearchFilterPipe } from './views/cadastros/pedido-cliente/pedido-cliente.component';
 import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
 import { PedidosHistoricoService } from './views/cadastros/services/pedidos-historico.service';
 import { NgxLoadingModule } from 'ngx-loading';
@@ -167,7 +167,8 @@ registerLocaleData(localePt, 'pt-BR');
     ListaCatalogosComponent,
     PedidoClienteComponent,
     PaginaSucessoComponent,
-    PedidosHistoricoViewComponent
+    PedidosHistoricoViewComponent,
+    SearchFilterPipe
   ],
   providers: [{
     provide: LocationStrategy,

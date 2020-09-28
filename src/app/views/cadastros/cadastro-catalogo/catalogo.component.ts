@@ -218,29 +218,47 @@ export class CatalogoComponent implements OnInit {
     let listaProd:Produto[] = [];
 
     this.pedidosService.buscarPorCatalogo(this.catalogo._id).then((p)=>{
+
+      
       p.forEach((ped:Pedido)=>{
         ped.produto_pedido.forEach((prod:Produto)=>{
-         listaProd.push(prod);          
+          listaProd.push(prod);          
         });
       });
-     
-     
-      let result:Produto[] = [];
-      listaProd.reduce(function(res, value) {
-        if (!res[value._id]) {
-          res[value._id] = { _id: value._id, quantidade: 0, unidade_medida:value.unidade_medida ,descricao:value.descricao};
-          result.push(res[value._id])
-        }
-        res[value._id].quantidade += value.quantidade;
-        return res;
-      }, {});
+      
+      let relatorio : string = 'Totais Pedidos do Catálogo de ' + this.datePipe.transform(this.catalogo.data_entrega,'dd/MM/yyyy HH:mm') + '\n\r';
 
-    console.log(result);
+      let g = this.groupBy(listaProd,'cod_fornecedor');
+      let r:any[] = Object.values(g);
+      r.forEach(e => {
+          let pe:Produto[] = e as Produto[];
+          let cod_for:string = "";
+          if(pe.length>0){
+            cod_for = pe[0].cod_fornecedor?pe[0].cod_fornecedor:"Não definido";
+          }
+          relatorio += "Fornecedor: " + cod_for + '\n\r';
 
-    let relatorio : string = 'Totais Pedidos do Catálogo de ' + this.datePipe.transform(this.catalogo.data_entrega,'dd/MM/yyyy HH:mm') + '\n\r';
-    result.forEach((s)=>{
-      relatorio += '\t' + s.descricao + ' - qtd: ' + s.quantidade + s.unidade_medida.descricao + '\n';
-    })
+          let result:Produto[] = [];
+          pe.reduce(function(res, value) {
+            if (!res[value._id]) {
+              res[value._id] = { _id: value._id, quantidade: 0, unidade_medida:value.unidade_medida ,descricao:value.descricao};
+              result.push(res[value._id])
+            }
+            res[value._id].quantidade += value.quantidade;
+            return res;
+          }, {});
+    
+        // console.log(result);
+    
+      
+        result.forEach((s)=>{
+          relatorio += '\t' + s.descricao + ' - qtd: ' + s.quantidade + s.unidade_medida.descricao + '\n';
+        })
+
+        relatorio += '\n\r';
+      });
+
+     
     var textFileAsBlob = new Blob([relatorio], {type:'text/plain'});
 
     var fileNameToSaveAs = "Total pedido";
@@ -268,6 +286,18 @@ export class CatalogoComponent implements OnInit {
     })
   }
 
+  groupBy(objectArray, property) {
+    return objectArray.reduce(function (acc, obj) {
+      var key = obj[property];
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(obj);
+      return acc;
+    }, {});
+  }
+
+  
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.list, event.previousIndex, event.currentIndex);
   }

@@ -29,7 +29,8 @@ export class CadastroProdutosComponent implements OnInit {
     limite: 0,
     quantidade:0,
     valor_total:0,
-    index:0
+    index:0,
+    cod_fornecedor:""
   };
 
   constructor(
@@ -74,6 +75,7 @@ export class CadastroProdutosComponent implements OnInit {
       valorB: [this.produto.valorB],
       limite: [this.produto.limite],
       unidade_medida: [this.produto?.unidade_medida?.id, Validators.required],
+      cod_fornecedor:[this.produto.cod_fornecedor]
     });
   }
 
@@ -135,7 +137,8 @@ export class CadastroProdutosComponent implements OnInit {
       unidade_medida: this.medidas[controls.unidade_medida.value -1],
       quantidade:0,
       valor_total:0,
-      index:controls.index.value
+      index:0,
+      cod_fornecedor:controls.cod_fornecedor.value
     };
 
     return produto;

@@ -59,6 +59,7 @@ export class PedidosHistoricoService {
             status: e.payload.doc.data()["status"],
             total_pedido: e.payload.doc.data()["total_pedido"],            
             catalogo:e.payload.doc.data()["catalogo"],
+            cliente:e.payload.doc.data()["cliente"],
           };
         });
         acept(lista);

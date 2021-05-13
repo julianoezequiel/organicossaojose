@@ -8,6 +8,7 @@ import { UsuarioService } from "../cadastros/services/usuario.service";
 import { ProdutosService } from "../cadastros/services/produtos.service";
 import { PedidosHistoricoService } from "../cadastros/services/pedidos-historico.service";
 import { CatalogoService } from '../cadastros/services/catalogo.service';
+import { ClientesService } from '../cadastros/services/clientes.service';
 
 export class Utils {
   public static unsubscribeAll(subObject: { subscriptions: Subscription[] }) {
@@ -27,6 +28,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalprodutos: number = 0;
   totalpedidosHistorico: number = 0;
   totalcatalogo: number = 0;
+  totalClientes:number = 0;
 
   constructor(
     public router: Router,
@@ -34,7 +36,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private usuarioService: UsuarioService,
     private produtosService: ProdutosService,
     private pedidosHistoricoService: PedidosHistoricoService,
-    private catalogoService: CatalogoService
+    private catalogoService: CatalogoService,
+    private clientesService:ClientesService
   ) {}
   ngOnDestroy(): void {
     Utils.unsubscribeAll({ subscriptions: this.subscriptions });
@@ -56,12 +59,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const sub5 = this.catalogoService.count().subscribe((result) => {
       this.totalcatalogo = result.length;
     });
+    const sub6 = this.clientesService.count().subscribe((result) => {
+      this.totalClientes = result.length;
+    });
 
     this.subscriptions.push(sub);
     this.subscriptions.push(sub2);
     this.subscriptions.push(sub3);
     this.subscriptions.push(sub4);
     this.subscriptions.push(sub5);
+    this.subscriptions.push(sub6);
   }
 
   goToPedidos() {
@@ -86,5 +93,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   goToPedido() {
     this.router.navigate(["pedido"]);
+  }
+
+  goToClientes() {
+    this.router.navigate(["lista-de-clientes"]);
   }
 }

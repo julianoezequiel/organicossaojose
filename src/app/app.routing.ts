@@ -21,6 +21,8 @@ import { PedidoClienteComponent } from './views/cadastros/pedido-cliente/pedido-
 import { PaginaSucessoComponent } from './views/cadastros/pagina-sucesso/pagina-sucesso.component';
 import { ListaHistoricoPedidosComponent } from './views/cadastros/lista-historico-pedidos/lista-historico-pedidos.component';
 import { PedidosHistoricoViewComponent } from './views/cadastros/pedidos-historico-view/pedidos-historico-view.component';
+import { CadastroClientesComponent } from './views/cadastros/cadastro-clientes/cadastro-clientes.component';
+import { ListaClientesComponent } from './views/cadastros/lista-clientes/lista-clientes.component';
 
 export const routes: Routes = [
   {
@@ -175,6 +177,27 @@ export const routes: Routes = [
         component: PedidosHistoricoViewComponent,
         data: {
           title: 'Histórico Pedidos'
+        }
+      },
+      {
+        path: 'cadastro-cliente',
+        component: CadastroClientesComponent,
+        data: {
+          title: 'Novo Cliente '
+        }
+      },
+      {
+        path: 'cadastro-cliente/:id',
+        component: CadastroClientesComponent,
+        data: {
+          title: 'Editar Cliente '
+        }
+      },
+      {
+        path: 'lista-de-clientes',
+        component: ListaClientesComponent,
+        data: {
+          title: 'Clientes '
         }
       },
       {

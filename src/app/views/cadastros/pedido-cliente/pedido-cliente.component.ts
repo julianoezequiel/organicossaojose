@@ -16,6 +16,8 @@ import { PedidosService } from '../services/pedidos.service';
 import { unidades } from '../model/unidade-medida';
 import { Button } from 'protractor';
 import { CurrencyPipe } from '@angular/common';
+import { Cliente } from '../model/cliente.model';
+import { ClientesService } from '../services/clientes.service';
 
 @Pipe({
   name: 'searchfilter'
@@ -46,18 +48,29 @@ export class PedidoClienteComponent implements OnInit {
   total :number = 0;
   urlWpp = "https://api.whatsapp.com/send?" + "phone=55";
   link:string;
+  filtroString:string="";
+
+  cliente:Cliente={
+    _id:'',
+    complemento:'',
+    endereco:'',
+    nome:'',
+    numero:'',
+    numero_celular:''
+  };
 
   pedido: Pedido = {
     _id: "",
     data: new Date(),
     dia_entrega: DiaSemana.SEXTA,
     forma_pagamento: FormasPagamentos.DINHEIRO,
-    numero_celular: "",
+    numero_celular: '+55 41 ',
     pago: false,
     produto_pedido: [],
     status: Status.EM_ANDAMENTO,
     total_pedido: 0,
     catalogo:null,
+    cliente:this.cliente
   };
 
   catalogoAtual: Catalogo;
@@ -72,7 +85,8 @@ export class PedidoClienteComponent implements OnInit {
     private catalogoService: CatalogoService,
     private activatedRoute: ActivatedRoute,
     private pedidosService: PedidosService,
-    private cp: CurrencyPipe
+    private cp: CurrencyPipe,
+    private clientesService:ClientesService
   ) {}
 
   ngOnInit() {
@@ -107,6 +121,7 @@ export class PedidoClienteComponent implements OnInit {
             this.pedido.catalogo =  value.catalogo;
             this.catalogoAtual = value.catalogo;
             this.catalogoAtual.produtos = this.pedido.produto_pedido;
+            this.cliente=value?.cliente;
             this.calculaTotal();
             this.createForm();
 					});						
@@ -129,11 +144,14 @@ export class PedidoClienteComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     const controls = this.pedidoForm.controls;
     let existeAtual: boolean = false;
     /** check form */
-    if (this.pedidoForm.invalid) {
+    let numTeste =  this.pedidoForm.controls.numero_celular.value;
+    numTeste =  numTeste.replace('+55 41 ','') ;
+    // alert(numTeste.length );
+    if (this.pedidoForm.invalid || numTeste.length==0 )  {
       Object.keys(controls).forEach((controlName) =>
         controls[controlName].markAsTouched()
       );
@@ -154,7 +172,9 @@ export class PedidoClienteComponent implements OnInit {
         progressBar: true,
       });
       return;
-    }
+    } 
+
+    await this.adicionarCliente();
     
     delete this.catalogoAtual.produtos;
     delete this.catalogoAtual.pedidos;
@@ -168,24 +188,14 @@ export class PedidoClienteComponent implements OnInit {
 
   addPedido(p: Pedido) {
     this.pedidosService.create(p).then((pp) => {
-      // this.toastr.success("Pedido cadastrado com sucesso", "Atenção!", {
-      //   closeButton: true,
-      //   progressAnimation: "decreasing",
-      //   progressBar: true,
-      // });   
-      p._id = pp.id;
+       p._id = pp.id;
       this.enviarWpp(p);   
-    });
+    }).catch(err=>alert(err));
   }
   updatePedido(p: Pedido) {
     this.pedidosService.update(p._id, p).then(() => {
-      // this.toastr.success("Pedido atualizado com sucesso", "Atenção!", {
-      //   closeButton: true,
-      //   progressAnimation: "decreasing",
-      //   progressBar: true,
-      // });
       this.enviarWpp(p);
-    });
+    }).catch(err=>alert(err));
   }
   preparePedido(): Pedido {
     const controls = this.pedidoForm.controls;
@@ -201,6 +211,7 @@ export class PedidoClienteComponent implements OnInit {
       status: controls.status.value,
       total_pedido: controls.total_pedido.value,
       catalogo:this.catalogoAtual,
+      cliente:this.cliente
     };
 
     p.produto_pedido = this.catalogoAtual.produtos.filter((p:Produto)=>{
@@ -208,20 +219,26 @@ export class PedidoClienteComponent implements OnInit {
     });
     
     p.total_pedido = this.total;
-
-
     return p;
   }
 
+  async adicionarCliente(){
+    await this.clientesService.buscarPorNumeroCelular(this.pedido.numero_celular).then((c=>{
+      if(c.length>0){
+        this.cliente = c[0];
+      }
+      alert(this.cliente);
+    }))
+  }
   enviarWpp(p: Pedido){
     
     this.router.navigate(["sucess"]);
 
-    let mensagem = 'Pedido \r\n cod: ' + p._id + '\r\r\n';
+    let mensagem = 'Pedido \r\n cod: ' + p._id + '\r\n\n';
     
     p.produto_pedido.forEach((s)=>{
-       mensagem += s.descricao + ' - ' + s.quantidade + ' '+
-        s.unidade_medida.descricao +  ' - ' + this.cp.transform(s.valor_total,'BRL', 'symbol', '1.2-2') + '\r\n';
+       mensagem += s.quantidade + '  ' + s.descricao + '  ' +
+       this.cp.transform(s.valor_total,'BRL', 'symbol', '1.2-2') + ' ' + s.unidade_medida.descricao +  '\r\n\n';
     })
 
     mensagem += 'Total = ' +  this.cp.transform(p.total_pedido,'BRL', 'symbol', '1.2-2');
@@ -259,7 +276,6 @@ export class PedidoClienteComponent implements OnInit {
     var numsStr = string.replace(/[^0-9]/g, '');
     return parseInt(numsStr);
   }
-
 
   voltar() {
     this.router.navigate(["lista-de-pedidos"]);

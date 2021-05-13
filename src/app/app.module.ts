@@ -98,8 +98,18 @@ import { NgxLoadingModule } from 'ngx-loading';
 import { PedidosHistoricoViewComponent } from './views/cadastros/pedidos-historico-view/pedidos-historico-view.component';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
+import { ListaClientesComponent } from './views/cadastros/lista-clientes/lista-clientes.component';
+import { CadastroClientesComponent } from './views/cadastros/cadastro-clientes/cadastro-clientes.component'
+import { ClientesService } from './views/cadastros/services/clientes.service';
+
 
 registerLocaleData(localePt, 'pt-BR');
+
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+};
+
 
 @NgModule({
   imports: [
@@ -115,8 +125,7 @@ registerLocaleData(localePt, 'pt-BR');
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ChartsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-   
+    AngularFireModule.initializeApp(environment.firebase),   
     AngularFireAuthModule,
     AngularFirestoreModule,
     FormsModule,
@@ -141,8 +150,8 @@ registerLocaleData(localePt, 'pt-BR');
     MatNativeDateModule,
     MatSlideToggleModule,
     NgxLoadingModule.forRoot({}),
-    DragDropModule
-    
+    DragDropModule,
+    NgxMaskModule.forRoot(maskConfig),    
   ],
   declarations: [
     AppComponent,
@@ -168,12 +177,13 @@ registerLocaleData(localePt, 'pt-BR');
     PedidoClienteComponent,
     PaginaSucessoComponent,
     PedidosHistoricoViewComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    ListaClientesComponent,
+    CadastroClientesComponent
   ],
   providers: [{
     provide: LocationStrategy,
-    useClass: HashLocationStrategy,
-    
+    useClass: HashLocationStrategy    
   },
   AuthService,
   AuthGuard,
@@ -185,8 +195,9 @@ registerLocaleData(localePt, 'pt-BR');
   {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
   { provide: LOCALE_ID, useValue: 'pt-BR' }  ,
   {provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL'},
-  CurrencyPipe  
-
+  CurrencyPipe,
+  SearchFilterPipe,
+  ClientesService
   
 ],
   entryComponents: [ConfirmDialogComponent,ListaProdutosCatalogoComponent],

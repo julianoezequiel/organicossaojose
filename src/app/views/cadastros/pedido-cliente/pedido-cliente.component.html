@@ -11,17 +11,17 @@
   <!-- <mat-card-title>Cadastrar Pedido</mat-card-title>        -->
   <!-- </div> -->
 </mat-toolbar>
-<div class="row">
-  <div class="col">
-    <img class="card-img-top" width="80" height="80" style="float: left;" src="../../../assets/img/brand/logo.png" class="img-thumbnail" alt="Card image cap">
-    <p style="text-align: center;vertical-align: middle;margin-top: 15px;">
-      <span  style="font-size: small;padding: 5px;width: 100%;text-align: center;">Orgânicos São José</span><br>
-      <span style="font-size: small;padding: 5px;width: 100%;text-align: center;">CNPJ:88.888.888/0001-00</span>
-    </p>
-  </div>
-</div>
 <form [formGroup]="pedidoForm" novalidate id="form">
-  <mat-card class="" style="">
+  <div class="row">
+    <div class="col">
+      <img class="card-img-top" width="80" height="80" style="float: left;" src="../../../assets/img/brand/logo.png" class="img-thumbnail" alt="Card image cap">
+      <p style="text-align: center;vertical-align: middle;margin-top: 15px;">
+        <span  style="font-size: small;padding: 5px;width: 100%;text-align: center;">Orgânicos São José</span><br>
+        <span style="font-size: small;padding: 5px;width: 100%;text-align: center;">CNPJ:88.888.888/0001-00</span>
+      </p>
+    </div>
+  </div>
+  <mat-card >
     <div class="row">
       <div class="col">
         <mat-form-field class="input-full-width" style="width: 100%">
@@ -53,15 +53,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                class="td-prod"
-                *ngFor="
-                  let prod of catalogoAtual?.produtos
-                    | searchfilter: filtroString
-                "
-              >
+              <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos | searchfilter: filtroString">
                 <td class="td-prod-descr" style="width: 50%">
-                  {{ prod.descricao }} <br />
+                 <span class="altura-linha"> {{ prod.descricao }} </span><br>
                   {{ prod.valorA | currency: "BRL":true }}
                   {{ tipoUnidademedida(prod) }}
                 </td>
@@ -115,7 +109,7 @@
       <div class="col-sm-12 col-xm-12 col-md-6">
         <mat-form-field class="full-width">
           <mat-label>Celular</mat-label>
-          <input
+          <input mask="+00 (00) 0000-0000|| +00 (00) 0 0000-0000"  
             matInput
             placeholder="(00)00000-0000"
             formControlName="numero_celular"

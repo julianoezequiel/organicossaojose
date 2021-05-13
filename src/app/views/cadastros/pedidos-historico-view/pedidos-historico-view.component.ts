@@ -42,6 +42,7 @@ export class PedidosHistoricoViewComponent implements OnInit {
     status: Status.EM_ANDAMENTO,
     total_pedido: 0,
     catalogo: null,
+    cliente:null
   };
 
   catalogoAtual: Catalogo;
@@ -196,6 +197,7 @@ export class PedidosHistoricoViewComponent implements OnInit {
       status: controls.status.value,
       total_pedido: controls.total_pedido.value,
       catalogo: this.catalogoAtual,
+      cliente:null
     };
 
     p.produto_pedido = this.catalogoAtual.produtos.filter((p: Produto) => {

@@ -1,0 +1,63 @@
+Área administrativa
+	1 página login 3H
+	1 página listagem de usuários 3H
+	1 pagina adicionar e editar usuários 3H
+ 	1 pagina de listagem produtos 3H
+	1 página de adicionar e editar produtos 3H
+	1 página listagem de pedidos/pendentes 3H
+	1 página listagem de histórico pedidos 3H
+
+Área cliente	
+	1 página criar pedido 12H
+		-> Informar o número do celular ou CPF
+		-> Adiciona os produtos e a quantidade
+		-> Calcular o valor de total de cada produto 
+		-> Calcular o valor total do pedido
+		-> Salvar em uma base de dados e enviar por WhatsApp
+		
+		
+Sistema ficará hospedado gratuitamente até os valores de uso do Firebase/Google
+Caso queira domínio personalizado taxa de 50R$/Ano
+Total 33hs X 35R$\Hrs 1.155,00		
+
+1 ent. + 2 x de R$385,00
+
+ordernação dos produtos do catálogo. -> OK
+
+filtro tela meu pedido somente quando painel
+orden tela meu pedido ->  OK
+
+espaçamento tela de pedido cliente => OK
+botaõ texto ENVIAR PEDIDO -> OK
+mascara campo +55 (41)  -> OK
+entrega defalt sexta -> OK
+cabeçalho na tela Razão Social e CNPJ => OK
+	
+cadastro produtos
+campo cod. fornecedor -> OK
+
+texto enviado pelo WP
+qtd produto valor === espaçamento de 1 linha => OK
+
+Total em baixo
+
+
+cadastro de cliente => OK
+listagem e edição => OK
+campos 
+	número de celular
+	nome 
+	endereço
+	numero
+	complemento
+	
+durante o pedido vincular o pedito au cliente se possível
+
+na tela de catálogo fazer o total dos pedidos agrupado por cod fornecedor	=> OK
+
+BRÓCOLIS RAMOSO	R$ 7,00	un.	  
+PEPINO	R$ 7,00	500g	  
+MORANGO CONGELADO
+	
+
+	

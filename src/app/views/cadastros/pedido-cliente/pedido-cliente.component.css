@@ -83,3 +83,12 @@
   .example-spacer {
     flex: 1 1 auto;
   }
+
+  .altura-linha{
+    height: 15px !important;
+    display: block;
+    width: 110px !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 5px !important;
+    word-break: pre-line;
+  }

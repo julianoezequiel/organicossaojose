@@ -15,6 +15,7 @@ import { PedidosService } from "../services/pedidos.service";
 import { Produto } from "../model/produto.model";
 import { UnidadeMedida, unidades } from "../model/unidade-medida";
 import { PedidosHistoricoService } from "../services/pedidos-historico.service";
+import { Cliente } from '../model/cliente.model';
 
 @Component({
   selector: "cadastro-pedidos",
@@ -41,9 +42,11 @@ export class CadastroPedidosComponent implements OnInit ,OnDestroy{
     status: Status.EM_ANDAMENTO,
     total_pedido: 0,
     catalogo: null,
+    cliente:null,
   };
 
   catalogoAtual: Catalogo;
+  cliente:Cliente;
 
   constructor(
     private fb: FormBuilder,
@@ -90,6 +93,7 @@ export class CadastroPedidosComponent implements OnInit ,OnDestroy{
             this.pedido.catalogo = value?.catalogo;
             this.catalogoAtual = value?.catalogo;
             this.catalogoAtual.produtos = this.pedido?.produto_pedido;
+            this.cliente = value?.cliente
             this.calculaTotal();
           }
           this.createForm();
@@ -196,6 +200,7 @@ export class CadastroPedidosComponent implements OnInit ,OnDestroy{
       status: controls.status.value,
       total_pedido: controls.total_pedido.value,
       catalogo: this.catalogoAtual,
+      cliente:this.cliente
     };
 
     p.produto_pedido = this.catalogoAtual.produtos.filter((p: Produto) => {

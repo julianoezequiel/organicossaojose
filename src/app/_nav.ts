@@ -29,6 +29,12 @@ export const navItems: INavData[] = [
     icon: "fa fa-shopping-cart",
   },
   {
+    name: 'Clientes',
+    // name: "2",
+    url: "/lista-de-clientes",
+    icon: "fa fa-address-card",
+  },
+  {
     name: 'Usuários',
     // name: "4",
     url: "/lista-de-usuario",

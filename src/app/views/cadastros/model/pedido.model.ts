@@ -3,6 +3,7 @@ import { DiaSemana } from './dia-semana.enum';
 import { Status } from './status.enum';
 import { Produto } from './produto.model';
 import { Catalogo } from './catalogo.model';
+import { Cliente } from './cliente.model';
 
 export class Pedido {
     data:Date;
@@ -15,4 +16,5 @@ export class Pedido {
     dia_entrega:DiaSemana;
     pago:boolean | string;
     catalogo:Catalogo;
+    cliente:Cliente;
 }

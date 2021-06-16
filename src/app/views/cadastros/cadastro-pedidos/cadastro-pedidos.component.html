@@ -8,14 +8,51 @@
     <mat-card-content>
       <div class="row">
         <div class="col">
+        <mat-card-actions>
+          <button mat-button mat-raised-button color="default" type="button" (click)="openDialog()" style="margin-left: 10px;">
+            Buscar Cliente
+            <mat-icon>search</mat-icon>            
+          </button>                
+        </mat-card-actions>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field style="width: 70%;">
+            <mat-label>Nome</mat-label>
+            <input matInput placeholder="Nome Cliente" formControlName="nome">            
+          </mat-form-field> 
+        <!-- </div> -->
+        <!-- <div class="col"> -->
+          <mat-form-field style="width: 29%;">
+            <mat-label>Celular</mat-label>
+            <input matInput placeholder="(00)00000-0000" formControlName="numero_celular">            
+          </mat-form-field>          
+        </div> 
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field style="width: 59%;">
+            <mat-label>Endereço</mat-label>
+            <input matInput formControlName="endereco">            
+          </mat-form-field>          
+          <mat-form-field style="width: 10%;">
+            <mat-label>Número</mat-label>
+            <input matInput formControlName="numero">            
+          </mat-form-field>          
+          <mat-form-field style="width: 30%;">
+            <mat-label>Complemento</mat-label>
+            <input matInput formControlName="complemento">            
+          </mat-form-field>          
+        </div>
+      </div>
+      <div class="row">
+        <!-- <div class="col">
           <mat-form-field class="full-width">
             <mat-label>Celular</mat-label>
-            <input matInput placeholder="(00)00000-0000" formControlName="numero_celular">
-            <mat-error *ngIf="pedidoForm.controls['numero_celular'].hasError('required')">
-              Celular é <strong>obrigatório</strong>
-            </mat-error>
+            <input matInput placeholder="(00)00000-0000" formControlName="numero_celular">            
           </mat-form-field>          
-        </div>       
+        </div>        -->
         <div class="col">
           <mat-form-field class="full-width">
             <mat-label>Dia de entrega</mat-label>
@@ -43,17 +80,17 @@
           </mat-form-field>
         </div>  
 
-        <div class="col">
+        <div class="col" > 
           Total Pedido: {{total | currency:'BRL':true }}
         </div>
       </div> 
       <div class="row">
         <div class="col">
           <section class="example-section">
-            <label class="example-margin">Pago: </label>
+            <label class="example-margin" style="margin-bottom: 2px;">Pago: </label>
             <mat-radio-group formControlName="pago">
-              <mat-radio-button class="example-margin" [checked]="pedido.pago" value="true">Sim</mat-radio-button>
-              <mat-radio-button class="example-margin" [checked]="!pedido.pago" value="false">Não</mat-radio-button>
+              <mat-radio-button class="example-margin" [checked]="pedido.pago" [value]="true">Sim</mat-radio-button>
+              <mat-radio-button class="example-margin" [checked]="!pedido.pago" [value]="false">Não</mat-radio-button>
             </mat-radio-group>
           </section>
        </div>    
@@ -61,32 +98,60 @@
       <div class="row">
         <div class="col">
           <div class="table-responsive">
-            <table class="table table-striped table-sm">
+            <table class="table table-sm">
               <thead>
                 <tr>
                   <th>Produto</th>
                   <!-- <th>Preço</th> -->
                   <th class="td-prod-btn">qtd</th>
-                  <th>Total</th>
+                  <th>Subtotal</th>
                 </tr>
               </thead>
               <tbody>
                 <tr class="td-prod " *ngFor="let prod of catalogoAtual?.produtos">
-                  <td class="td-prod-descr" style="width:50%">{{ prod.descricao }} <br>
-                    {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }} </td>
-                  <!-- <td class="td-prod"> {{ prod.valorA | currency:'BRL':true }} {{ tipoUnidademedida(prod) }}</td> -->
-                  <td class="td-prod-btn" style="width:115px; display: block;">   
-                    <span >
-                      <button class="td-prod"  type="button" mat-icon-button>
-                        <mat-icon (click)="incrementarProd(prod)" class="icon-display">add</mat-icon>
+                  <td class="td-prod-descr" style="width: 50%">
+                    <span class="altura-linha"> {{ prod.descricao }} </span>
+                     {{ prod.valorA | currency: "BRL":true }}
+                     {{ tipoUnidademedida(prod) }}
+                   </td>
+                   <td class="td-prod-btn">
+                    <span class="span-btn">
+                      <button
+                        class="td-prod mat-elevation-z1"
+                        type="button"
+                        mat-mini-fab
+                        color="default"
+                      >
+                        <mat-icon
+                          (click)="decrementarProd(prod)"
+                          class="icon-display"
+                          >remove</mat-icon
+                        >
                       </button>
-                      <p class="qtd"> {{prod.quantidade || 0}} </p>
-                      <button class="td-prod" type="button" mat-icon-button>
-                        <mat-icon (click)="decrementarProd(prod)" class="icon-display">remove</mat-icon>
+  
+                      <p class="qtd">{{ prod.quantidade || 0 }}</p>
+  
+                      <button
+                        class="td-prod mat-elevation-z1"
+                        type="button"
+                        mat-mini-fab
+                        color="default"
+                      >
+                        <mat-icon
+                          (click)="incrementarProd(prod)"
+                          class="icon-display"
+                          >add</mat-icon
+                        >
                       </button>
-                    </span>             
+                    </span>
                   </td>
-                  <td class="td-prod" style="font-size: 10px;">{{(prod?.valor_total != null) ? (prod.valor_total | currency:'BRL':true) : (0 | currency:'BRL':true)}}</td>
+                  <td class="td-prod">
+                    {{
+                      prod?.valor_total != null
+                        ? (prod.valor_total | currency: "BRL":true)
+                        : (0 | currency: "BRL":true)
+                    }}
+                  </td>
                 </tr>
               </tbody>
             </table>

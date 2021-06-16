@@ -60,6 +60,39 @@ export class ClientesService {
     });
   }
 
+  buscarNome(pesquisa: string): Promise<Cliente[]> {
+    return new Promise<Cliente[]>((acept, reject) => {
+      var docs = this.firestore
+        .collection(this.collectionName)
+        .ref.orderBy("nome")
+         .where("nome", ">=", pesquisa)
+         .where("nome", "<=", pesquisa + "\uf8ff");
+      let lista: any[] = [];
+      docs.get().then(function (d) {
+        d.forEach((e) => {
+          lista.push(e.data());
+        });
+        acept(lista);
+      });
+    });
+  }
+
+  buscarCelular(pesquisa: string): Promise<Cliente[]> {
+    return new Promise<Cliente[]>((acept, reject) => {
+      var docs = this.firestore.collection(this.collectionName)
+        .ref.orderBy("numero_celular")
+         .where("numero_celular", ">=", pesquisa)
+         .where("numero_celular", "<=", pesquisa + "\uf8ff");
+      let lista: any[] = [];
+      docs.get().then(function (d) {
+        d.forEach((e) => {
+          lista.push(e.data());
+        });
+        acept(lista);
+      });
+    });
+  }
+
   listar(): Promise<Cliente[]> {
     return new Promise<Cliente[]>((acept, reject) => {
       this.read_all().subscribe((data) => {

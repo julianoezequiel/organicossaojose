@@ -30,11 +30,14 @@
     <div class="table-responsive" *ngIf="!semconteudo">
       <table #table mat-table class="full-width-table" aria-label="Elements" matSort [dataSource]="dataSource">
 
-
+        <ng-container matColumnDef="cliente.nome">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Nome</th>
+          <td mat-cell *matCellDef="let row">{{row.cliente.nome}}</td>
+        </ng-container>
         <!-- Id Column -->
-        <ng-container matColumnDef="numero_celular">
+        <ng-container matColumnDef="cliente.numero_celular">
           <th mat-header-cell *matHeaderCellDef mat-sort-header >Número Celular</th>
-          <td mat-cell *matCellDef="let row">{{row.numero_celular}}</td>
+          <td mat-cell *matCellDef="let row">{{row.cliente.numero_celular}}</td>
         </ng-container>
 
         <!-- Name Column -->
@@ -42,7 +45,6 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Data do Catálogo</th>
           <td mat-cell *matCellDef="let row">{{row?.catalogo?.data_entrega.toDate() | date: 'dd/MM/yyyy'}}</td>
         </ng-container>
-
 
         <ng-container matColumnDef="acoes">
           <th mat-header-cell *matHeaderCellDef>Ações</th>

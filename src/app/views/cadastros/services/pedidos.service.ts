@@ -68,7 +68,7 @@ export class PedidosService {
             data: e.payload.doc.data()["data"],
             dia_entrega: e.payload.doc.data()["dia_entrega"],
             forma_pagamento: e.payload.doc.data()["forma_pagamento"],
-            numero_celular: e.payload.doc.data()["numero_celular"],
+            numero_celular: e.payload.doc.data()["cliente.numero_celular"],
             pago: e.payload.doc.data()["pago"],
             produto_pedido: e.payload.doc.data()["produto_pedido"],
             status: e.payload.doc.data()["status"],

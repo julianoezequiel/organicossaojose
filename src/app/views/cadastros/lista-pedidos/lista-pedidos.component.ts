@@ -40,7 +40,7 @@ export class ListaPedidosComponent implements AfterViewInit, OnInit {
   semconteudo = false;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ["numero_celular", "data_entrega","acoes"];
+  displayedColumns = ["cliente.nome","cliente.numero_celular", "data_entrega","acoes"];
 
   async ngOnInit() {  
      await  this.carregarDados();

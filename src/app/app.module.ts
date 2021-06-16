@@ -102,6 +102,7 @@ import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { ListaClientesComponent } from './views/cadastros/lista-clientes/lista-clientes.component';
 import { CadastroClientesComponent } from './views/cadastros/cadastro-clientes/cadastro-clientes.component'
 import { ClientesService } from './views/cadastros/services/clientes.service';
+import { ListaClientesBuscaComponent } from './views/cadastros/cadastro-pedidos/lista-clientes-busca/lista-clientes-busca.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -179,7 +180,8 @@ const maskConfig: Partial<IConfig> = {
     PedidosHistoricoViewComponent,
     SearchFilterPipe,
     ListaClientesComponent,
-    CadastroClientesComponent
+    CadastroClientesComponent,
+    ListaClientesBuscaComponent
   ],
   providers: [{
     provide: LocationStrategy,
@@ -200,7 +202,7 @@ const maskConfig: Partial<IConfig> = {
   ClientesService
   
 ],
-  entryComponents: [ConfirmDialogComponent,ListaProdutosCatalogoComponent],
+  entryComponents: [ConfirmDialogComponent,ListaProdutosCatalogoComponent,ListaClientesBuscaComponent],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
